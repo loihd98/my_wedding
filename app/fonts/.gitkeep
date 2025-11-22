@@ -1,0 +1,5 @@
+# Placeholder for GeistVF.woff font file
+# Please download the Geist font from: https://vercel.com/font
+# and place GeistVF.woff in this directory
+
+# Alternative: Remove this font from layout.tsx if not using
