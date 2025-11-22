@@ -8,16 +8,17 @@ import { fadeInLeft, fadeInRight, imageAnimation, containerAnimation } from "@/l
 const SectionMansory = () => {
     // Mock data for wedding gallery images
     const galleryImages = [
-        { src: '/images/picture_1.jpg', alt: 'Wedding Photo 1', height: 'h-[250px]' },
-        { src: '/images/picture_2.jpg', alt: 'Wedding Photo 2', height: 'h-[300px]' },
-        { src: '/images/picture_3.jpg', alt: 'Wedding Photo 3', height: 'h-[270px]' },
+        { src: '/images/picture_11.jpg', alt: 'Wedding Photo 1', height: 'h-[250px]' },
+        { src: '/images/picture_10.jpg', alt: 'Wedding Photo 2', height: 'h-[300px]' },
+        { src: '/images/picture_9.jpg', alt: 'Wedding Photo 3', height: 'h-[270px]' },
         { src: '/images/picture_4.jpg', alt: 'Wedding Photo 4', height: 'h-[320px]' },
         { src: '/images/picture_5.jpg', alt: 'Wedding Photo 5', height: 'h-[230px]' },
         { src: '/images/picture_6.jpg', alt: 'Wedding Photo 6', height: 'h-[290px]' },
         { src: '/images/picture_7.jpg', alt: 'Wedding Photo 7', height: 'h-[280px]' },
         { src: '/images/picture_8.jpg', alt: 'Wedding Photo 8', height: 'h-[250px]' },
-        { src: '/images/picture_9.jpg', alt: 'Wedding Photo 9', height: 'h-[310px]' },
-        { src: '/images/picture_10.jpg', alt: 'Wedding Photo 10', height: 'h-[220px]' },
+        { src: '/images/picture_3.jpg', alt: 'Wedding Photo 9', height: 'h-[310px]' },
+        { src: '/images/picture_2.jpg', alt: 'Wedding Photo 10', height: 'h-[220px]' },
+        { src: '/images/picture_1.jpg', alt: 'Wedding Photo 11', height: 'h-[220px]' },
         { src: '/images/picture_1.jpg', alt: 'Wedding Photo 1', height: 'h-[280px]' },
         { src: '/images/picture_2.jpg', alt: 'Wedding Photo 2', height: 'h-[240px]' },
         { src: '/images/picture_3.jpg', alt: 'Wedding Photo 3', height: 'h-[330px]' },
@@ -28,6 +29,7 @@ const SectionMansory = () => {
         { src: '/images/picture_8.jpg', alt: 'Wedding Photo 8', height: 'h-[290px]' },
         { src: '/images/picture_9.jpg', alt: 'Wedding Photo 9', height: 'h-[320px]' },
         { src: '/images/picture_10.jpg', alt: 'Wedding Photo 10', height: 'h-[270px]' },
+        { src: '/images/picture_11.jpg', alt: 'Wedding Photo 11', height: 'h-[220px]' },
     ];
 
     // Split images into 2 columns
@@ -35,7 +37,7 @@ const SectionMansory = () => {
     const rightColumn = galleryImages.filter((_, index) => index % 2 === 1);
 
     return (
-        <motion.div 
+        <motion.div
             className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-hidden relative"
             initial="hidden"
             whileInView="visible"
@@ -43,7 +45,7 @@ const SectionMansory = () => {
             variants={containerAnimation}
         >
             {/* Section Header */}
-            <motion.div 
+            <motion.div
                 className="text-center py-12 px-4 relative z-10"
                 variants={fadeInLeft}
             >

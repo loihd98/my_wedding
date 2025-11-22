@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -5,14 +7,14 @@ import { fadeInLeft, imageAnimation, containerAnimation } from "@/lib/motionAnim
 
 const SectionQuoteSweet = () => {
     return (
-        <motion.div 
-            className="relative mt-10 max-auto w-full py-2 min-h-[450px] h-fit min-w-[20px] flex flex-col items-center overflow-hidden"
+        <motion.div
+            className="relative mt-10 max-auto w-full min-h-[450px] h-fit min-w-[20px] flex flex-col items-center overflow-hidden"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-10%" }}
             variants={containerAnimation}
         >
-            <motion.div 
+            <motion.div
                 className="flex justify-between w-full absolute top-3 z-10"
                 variants={fadeInLeft}
             >
@@ -26,12 +28,12 @@ const SectionQuoteSweet = () => {
             </motion.div>
 
             {/* Full Width Image */}
-            <motion.div 
+            <motion.div
                 className="w-full relative h-[650px]  overflow-hidden shadow-lg"
                 variants={imageAnimation}
             >
                 <Image
-                    src="/images/main_picture.jpg"
+                    src="/images/picture_8.jpg"
                     alt="Wedding Quote Image"
                     fill
                     className="object-cover"

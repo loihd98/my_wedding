@@ -2,9 +2,23 @@
 
 A modern, production-ready wedding landing page built with Next.js 14, featuring smooth animations, top-tier SEO, and enterprise-grade security.
 
+## 🚀 Quick Deploy to VPS
+
+For complete VPS deployment guide, see **[DEPLOY_GUIDE.md](./DEPLOY_GUIDE.md)**
+
+### Quick Commands:
+
+```bash
+# Test locally first
+./test-local.sh
+
+# Simple deployment with Docker Compose
+docker-compose -f docker-compose.simple.yml up -d --build
+```
+
 ## 🎯 Features
 
-- ✨ **Modern Animations**: Framer Motion, GSAP with ScrollTrigger, Lenis smooth scroll
+- ✨ **Modern Animations**: Framer Motion with scroll-triggered effects
 - 🎨 **Elegant Design**: Korean-style luxury wedding aesthetics
 - 🔍 **SEO Optimized**: 90+ Lighthouse score, JSON-LD schema, sitemap
 - 🔒 **Enterprise Security**: CSP, HSTS, security headers
@@ -12,6 +26,8 @@ A modern, production-ready wedding landing page built with Next.js 14, featuring
 - 🚀 **Performance**: Next.js 14 App Router, image optimization
 - 🐳 **Docker Ready**: Multi-stage build, production deployment
 - 🌐 **SSL Configured**: Nginx reverse proxy with Let's Encrypt
+- 📋 **RSVP System**: Form submission with Google Sheets integration
+- 💰 **Digital Gifts**: QR codes for wedding gift transfers
 
 ## 📦 Tech Stack
 
@@ -82,6 +98,7 @@ loihangwedding/
 ### 1. **Update Wedding Details**
 
 Edit `/app/page.tsx`:
+
 ```typescript
 // Update JSON-LD schema with your details
 startDate: '2026-06-15T14:00:00+07:00',  // Your wedding date
@@ -95,6 +112,7 @@ location: {
 ```
 
 Edit `/components/Hero.tsx`:
+
 ```typescript
 // Update couple names and date
 <h1>Your Name <span>&</span> Partner Name</h1>
@@ -107,6 +125,7 @@ const weddingDate = new Date('2026-06-15T14:00:00+07:00')
 ### 2. **Add Wedding Photos**
 
 Place your images in `/public/images/`:
+
 ```
 public/
   images/
@@ -119,60 +138,70 @@ public/
 ```
 
 Update `/components/Gallery.tsx`:
+
 ```typescript
 const photos: Photo[] = [
-  { src: '/images/gallery/1.jpg', width: 4, height: 3, alt: 'Your photo description' },
+  {
+    src: "/images/gallery/1.jpg",
+    width: 4,
+    height: 3,
+    alt: "Your photo description",
+  },
   // Add more photos
-]
+];
 ```
 
 ### 3. **Update Love Story Timeline**
 
 Edit `/components/Timeline.tsx`:
+
 ```typescript
 const timelineEvents: TimelineEvent[] = [
   {
-    date: 'Your Date',
-    title: 'Your Event Title',
-    description: 'Your event description',
-    icon: '🎉', // Choose an emoji
+    date: "Your Date",
+    title: "Your Event Title",
+    description: "Your event description",
+    icon: "🎉", // Choose an emoji
   },
   // Add your story milestones
-]
+];
 ```
 
 ### 4. **Update Event Details**
 
 Edit `/components/EventDetails.tsx`:
+
 ```typescript
 const events = [
   {
-    title: 'Wedding Ceremony',
-    time: 'Your Time',
-    date: 'Your Date',
-    location: 'Your Venue',
-    address: 'Full Address',
-    description: 'Your description',
-    mapUrl: 'Your Google Maps embed URL', // Get from Google Maps > Share > Embed
-  }
-]
+    title: "Wedding Ceremony",
+    time: "Your Time",
+    date: "Your Date",
+    location: "Your Venue",
+    address: "Full Address",
+    description: "Your description",
+    mapUrl: "Your Google Maps embed URL", // Get from Google Maps > Share > Embed
+  },
+];
 ```
 
 ### 5. **Update SEO Metadata**
 
 Edit `/app/layout.tsx`:
+
 ```typescript
 export const metadata: Metadata = {
-  title: 'Your Names Wedding',
-  description: 'Your wedding description',
-  metadataBase: new URL('https://your-domain.com'),
+  title: "Your Names Wedding",
+  description: "Your wedding description",
+  metadataBase: new URL("https://your-domain.com"),
   // Update other metadata fields
-}
+};
 ```
 
 ### 6. **Configure Environment Variables**
 
 Create `.env.local`:
+
 ```env
 NODE_ENV=production
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
@@ -183,6 +212,7 @@ NEXT_PUBLIC_GA_ID=your-ga-id
 ### 7. **Update Social Links**
 
 Edit `/components/Footer.tsx`:
+
 ```typescript
 <a href="https://instagram.com/yourhandle">Instagram</a>
 <a href="https://facebook.com/yourpage">Facebook</a>
@@ -192,6 +222,7 @@ Edit `/components/Footer.tsx`:
 ### 8. **Customize Colors**
 
 Edit `/tailwind.config.ts`:
+
 ```typescript
 colors: {
   primary: {
@@ -222,6 +253,7 @@ docker-compose down
 ## 🌐 VPS Deployment Guide
 
 ### Server Requirements
+
 - Ubuntu 22.04 LTS
 - 2GB RAM minimum
 - Docker & Docker Compose installed
@@ -338,6 +370,7 @@ systemctl reload nginx
 ### Step 7: Verify Deployment
 
 Visit your website:
+
 - `http://loihangwedding.io.vn` (should redirect to HTTPS)
 - `https://loihangwedding.io.vn` (secure site)
 
@@ -365,6 +398,7 @@ docker-compose up -d --build
 ## 🔧 Troubleshooting
 
 ### Container won't start
+
 ```bash
 # Check logs
 docker-compose logs
@@ -375,6 +409,7 @@ docker-compose up -d
 ```
 
 ### Nginx errors
+
 ```bash
 # Test configuration
 nginx -t
@@ -387,6 +422,7 @@ systemctl restart nginx
 ```
 
 ### SSL certificate issues
+
 ```bash
 # Check certificate status
 certbot certificates
@@ -399,6 +435,7 @@ ls -la /etc/letsencrypt/live/loihangwedding.io.vn/
 ```
 
 ### Port already in use
+
 ```bash
 # Find process using port 3000
 lsof -i :3000
@@ -412,6 +449,7 @@ kill -9 <PID>
 ## 📊 Performance Optimization
 
 ### Image Optimization
+
 - Use AVIF/WebP formats
 - Compress images before upload
 - Recommended sizes:
@@ -420,11 +458,13 @@ kill -9 <PID>
   - Thumbnails: 600x400 (~50KB)
 
 ### Caching Strategy
+
 - Static assets: 1 year cache
 - Images: 1 year cache
 - HTML/API: No cache or short cache
 
 ### Monitoring
+
 - Use Lighthouse for performance testing
 - Monitor with Google Analytics
 - Setup uptime monitoring (UptimeRobot)

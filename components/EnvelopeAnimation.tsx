@@ -45,7 +45,7 @@ export const EnvelopeAnimation: React.FC<EnvelopeAnimationProps> = ({
         {/* Letter */}
         <div
           className={`relative bg-white w-[90%] mx-auto h-[90%] top-[5%] rounded-md shadow-[0_2px_26px_rgba(0,0,0,0.12)] overflow-hidden transition-all ${isOpen
-            ? "translate-y-[-60px] duration-[0.4s] ease-in-out delay-[0.6s] z-20"
+            ? "translate-y-[-90px] duration-[0.4s] ease-in-out delay-[0.6s] z-20"
             : "translate-y-0 duration-[0.4s] ease-in-out delay-0 z-10"
             }`}
         >

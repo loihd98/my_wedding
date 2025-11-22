@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -6,7 +8,7 @@ import { fadeInRight, imageAnimation, containerAnimation } from "@/lib/motionAni
 
 export const SectionDate = () => {
     return (
-        <motion.div 
+        <motion.div
             className="relative max-auto w-full px-10 h-fit min-w-[20px] flex flex-col gap-10 items-center overflow-hidden py-10"
             initial="hidden"
             whileInView="visible"
@@ -23,7 +25,7 @@ export const SectionDate = () => {
                     className=" w-[200px] h-auto"
                 />
             </motion.div>
-            <motion.div 
+            <motion.div
                 className="h-auto w-full min-w-[20px] flex flex-col text-black text-[16.848px] font-medium text-center leading-normal tracking-normal normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-quicksand [text-shadow:0_0_2px_rgba(0,0,0,0)]"
                 variants={fadeInRight}
             >

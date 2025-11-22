@@ -119,7 +119,7 @@ const DateBoard: React.FC<DateBoardProps> = ({ className = '' }) => {
                                                     ? 'bg-[rgb(186,165,138)]'
                                                     : 'bg-red-500'
                                                     }`}>
-                                                    {date.eventType === 'reception' ? 'Tiệc Cưới' : 'Đám Cưới'}
+                                                    {date.eventType === 'reception' ? 'Tiệc Cưới' : 'Lễ thành hôn'}
                                                     {/* Arrow pointing down */}
                                                     <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-transparent ${date.eventType === 'reception'
                                                         ? 'border-t-[rgb(186,165,138)] border-t-4'

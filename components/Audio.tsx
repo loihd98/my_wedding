@@ -14,6 +14,19 @@ export default function Audio() {
     const handleEnded = () => setIsPlaying(false);
     audio.addEventListener("ended", handleEnded);
 
+    // Auto-play audio when component mounts
+    const playAudio = async () => {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch (error) {
+        // Auto-play might be blocked by browser policy
+        console.log("Auto-play was prevented by browser policy");
+      }
+    };
+
+    playAudio();
+
     return () => {
       audio.removeEventListener("ended", handleEnded);
     };
@@ -52,7 +65,7 @@ export default function Audio() {
           />
           {!isPlaying && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full h-[2px] bg-red-500 rotate-45 origin-center" />
+              <div className="w-full h-[2px] bg-white rotate-45 origin-center" />
             </div>
           )}
         </div>
