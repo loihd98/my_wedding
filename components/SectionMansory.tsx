@@ -1,7 +1,9 @@
 'use client'
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { fadeInLeft, fadeInRight, imageAnimation, containerAnimation } from "@/lib/motionAnimations";
 
 const SectionMansory = () => {
     // Mock data for wedding gallery images
@@ -33,16 +35,25 @@ const SectionMansory = () => {
     const rightColumn = galleryImages.filter((_, index) => index % 2 === 1);
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-hidden relative">
+        <motion.div 
+            className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-hidden relative"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
+            variants={containerAnimation}
+        >
             {/* Section Header */}
-            <div className="text-center py-12 px-4 relative z-10 ">
+            <motion.div 
+                className="text-center py-12 px-4 relative z-10"
+                variants={fadeInLeft}
+            >
                 <h2 className="text-4xl md:text-5xl h-auto w-full min-w-[20px] text-[rgb(186,165,138)] text-[39.312px] font-medium text-center leading-[1.22] tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]">
                     Our Gallery
                 </h2>
                 <p className="text-lg text-gray-600 font-mallong max-w-2xl mx-auto">
                     Những khoảnh khắc đáng nhớ của chúng tôi
                 </p>
-            </div>
+            </motion.div>
 
             {/* Masonry Container with Infinite Scroll */}
             <div className="relative w-full h-screen overflow-hidden">
@@ -96,7 +107,7 @@ const SectionMansory = () => {
                 <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-slate-50 to-transparent z-10 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-100 to-transparent z-10 pointer-events-none" />
             </div>
-        </div>
+        </motion.div>
     );
 };
 
