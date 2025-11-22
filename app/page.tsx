@@ -1,12 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Hero from "@/components/Hero";
-import Timeline from "@/components/Timeline";
-import EventDetails from "@/components/EventDetails";
-import Gallery from "@/components/Gallery";
-import RSVP from "@/components/RSVP";
-import Footer from "@/components/Footer";
 import { initSmoothScroll } from "@/lib/animations";
 import { SectionEnvelop } from "@/components/SectionEnvelop";
 import Audio from "@/components/Audio";
@@ -73,12 +67,6 @@ export default function Home() {
         <SectionSaveTheDate />
         <SectionBottom />
         <SectionQuoteSweet />
-        {/* <Hero />
-        <Timeline />
-        <EventDetails />
-        <Gallery />
-        <RSVP />
-        <Footer /> */}
       </div>
     </main>
   );
