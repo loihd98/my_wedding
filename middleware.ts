@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
   const isNextInternalPath =
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
-    pathname === "/favicon.ico" ||
+    pathname === "/favicon_wedding.png" ||
     pathname.includes(".") ||
     pathname.startsWith("/images") ||
     pathname.startsWith("/audio") ||
@@ -72,6 +72,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - Static assets (.svg, .png, .jpg, etc.)
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|woff|woff2|ttf|eot)$).*)",
+    "/((?!_next/static|_next/image|favicon_wedding.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|woff|woff2|ttf|eot)$).*)",
   ],
 };

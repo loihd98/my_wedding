@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Divider from "./Divider";
 import { fadeInRight, imageAnimation, containerAnimation } from "@/lib/motionAnimations";
 
-const SectionTime = () => {
+const SectionTime = ({ slug }: { slug: string }) => {
     return (
         <motion.div
             className="relative max-auto w-full px-3 py-2 min-h-[450px] h-fit min-w-[20px] flex flex-col items-center overflow-hidden bg-gradient-to-b from-white to-gray-50"
@@ -18,15 +18,25 @@ const SectionTime = () => {
                 className="h-auto w-full min-w-[20px] text-[rgb(186,165,138)] text-[39.312px] font-medium text-center leading-[1.59] tracking-normal normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]"
                 variants={fadeInRight}
             >
-                11 GIỜ 30 | CHỦ NHẬT | 30.11.2025
+                {slug === 'groom' ? '11 GIỜ 30' : '11 GIỜ'} | CHỦ NHẬT | 30.11.2025
             </motion.span>
             <span className="h-auto w-full min-w-[20px] text-[rgb(0,0,0)] text-[18.72px] font-medium text-center leading-normal tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]">
                 (Nhằm ngày 11 tháng 10 năm Ất Tỵ)
             </span>
             <Divider />
             <span className="h-auto w-full min-w-[20px] text-[rgb(0,0,0)] text-[21.528px] font-medium text-center leading-[1.33] tracking-[0px] uppercase no-underline not-italic pointer-events-none overflow-hidden break-words font-mallong [text-shadow:0_0_2px_rgba(0,0,0,0)]">
-                HÔN LỄ ĐƯỢC CỬ HÀNH TẠI
+                lỄ THÀNH HÔN
             </span>
+            <motion.span
+                className="h-auto w-full min-w-[20px] text-[rgb(186,165,138)] text-[39.312px] font-medium text-center leading-[1.59] tracking-normal normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]"
+                variants={fadeInRight}
+            >
+                11 GIỜ | THỨ 2 | 01.12.2025
+            </motion.span>
+            <span className="h-auto w-full min-w-[20px] text-[rgb(0,0,0)] text-[18.72px] font-medium text-center leading-normal tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]">
+                (Nhằm ngày 12 tháng 10 năm Ất Tỵ)
+            </span>
+            <Divider />
             <div className="border-2 flex justify-center flex-col items-center mt-5 w-full border-dashed border-gold-950 rounded-lg p-2">
                 <span className="h-auto w-full min-w-[20px] text-[rgb(186,165,138)] text-[39.312px] font-medium text-center leading-[1.22] tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]">
                     TƯ GIA NHÀ TRAI

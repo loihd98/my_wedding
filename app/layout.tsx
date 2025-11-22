@@ -186,7 +186,7 @@ export const metadata: Metadata = {
     siteName: 'Loi & Hang Wedding',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/main_picture.jpg',
         width: 1200,
         height: 630,
         alt: 'Loi & Hang Wedding',
@@ -199,7 +199,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Loi & Hang Wedding - A Love Story Begins',
     description: 'Join us as we celebrate the union of Loi and Hang.',
-    images: ['/og-image.jpg'],
+    images: ['/main_picture.jpg'],
   },
   robots: {
     index: true,
@@ -223,8 +223,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html 
-      lang="en" 
+    <html
+      lang="en"
       className={`
         ${inter.variable} 
         ${aquarelle.variable} 
@@ -242,6 +242,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_wedding.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_wedding.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#e3607e" />
       </head>

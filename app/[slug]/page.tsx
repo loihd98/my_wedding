@@ -11,7 +11,6 @@ import SectionSaveTheDate from "@/components/SectionSaveTheDate";
 import { SectionBottom } from "@/components/SectionBottom";
 import SectionQuoteSweet from "@/components/SectionQuoteSweet";
 import SectionRsvp from "@/components/SectionRsvp";
-import Navigation from '@/components/Navigation'
 import ClientWrapper from '@/components/ClientWrapper'
 
 // Valid slugs
@@ -35,13 +34,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const titles = {
-    groom: 'Chú Rể - Loi & Hang Wedding',
-    bridal: 'Cô Dâu - Loi & Hang Wedding'
+    groom: 'Lợi & Hằng Wedding',
+    bridal: 'Lợi & Hằng Wedding'
   }
 
   const descriptions = {
-    groom: 'Wedding invitation - Thông tin về chú rể Hà Lợi',
-    bridal: 'Wedding invitation - Thông tin về cô dâu Trần Hằng'
+    groom: 'Wedding invitation - Thông tin về lễ thành hôn của Hà Lợi và Trần Hằng',
+    bridal: 'Wedding invitation - Thông tin về lễ thành hôn của Hà Lợi và Trần Hằng'
   }
 
   return {
@@ -102,13 +101,13 @@ export default function SlugPage({ params }: PageProps) {
               "https://schema.org/OfflineEventAttendanceMode",
             location: {
               "@type": "Place",
-              name: "Grand Palace Wedding Hall",
+              name: "kIẾN HƯNG Wedding Hall",
               address: {
                 "@type": "PostalAddress",
-                streetAddress: "123 Wedding Street",
-                addressLocality: "Ho Chi Minh City",
-                addressRegion: "HCM",
-                postalCode: "700000",
+                streetAddress: "CT6 XA LA KIẾN HƯNG HÀ ĐÔNG HÀ NỘI",
+                addressLocality: "Hà Nội city",
+                addressRegion: "HN",
+                postalCode: "10000",
                 addressCountry: "VN",
               },
             },
@@ -129,15 +128,15 @@ export default function SlugPage({ params }: PageProps) {
 
         {/* All Sections */}
         <SectionEnvelop slug={slug} />
-        <SectionTime />
+        <SectionTime slug={slug} />
         <SectionQuote />
         <SectionActor />
         <SectionMansory />
         <SectionDate />
         <SectionSaveTheDate />
+        <SectionBottom />
         <SectionQuoteSweet />
         <SectionRsvp />
-        {/* <SectionBottom /> */}
       </ClientWrapper>
     </main>
   );

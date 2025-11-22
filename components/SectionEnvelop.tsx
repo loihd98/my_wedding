@@ -70,7 +70,7 @@ export const SectionEnvelop = ({ slug }: { slug: "groom" | "bridal" }) => {
         Tên khách mời
       </span> */}
       <span className="mt-10 h-auto w-full min-w-[20px] text-black text-[21.528px] font-medium text-center leading-[1.33] tracking-normal uppercase no-underline not-italic pointer-events-none overflow-hidden break-words font-mallong [text-shadow:0_0_2px_rgba(0,0,0,0)]">
-        ĐẾN DỰ BUỔI TIỆC CHUNG VUI CÙNG GIA ĐÌNH CHÚNG TÔI VÀO LÚC
+        ĐẾN DỰ BUỔI TIỆC CHUNG VUI CÙNG GIA ĐÌNH {slug === undefined ? '' : slug === 'groom' ? 'NHÀ TRAI' : 'NHÀ GÁI'} CHÚNG TÔI VÀO LÚC
       </span>
     </motion.div>
   );
