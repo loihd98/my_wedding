@@ -41,7 +41,7 @@ export default function Audio() {
 
   const togglePlay = () => {
     // Disable audio functionality on iOS
-    if (isIOS) {
+    if (isIOS && isInAppBrowser) {
       console.log("Audio disabled on iOS");
       return;
     }
@@ -62,21 +62,16 @@ export default function Audio() {
 
   if (!isMounted) return null;
 
-  // Don't render on in-app browsers except iOS (iOS shows disabled state)
-  if (isInAppBrowser && !isIOS) {
-    return null;
-  }
-
   return (
     <>
       {/* Only render audio element on non-iOS devices */}
       {!isIOS && <audio ref={audioRef} src="/audio/my_love.mp3" loop />}
 
       <button
-        onClick={isIOS ? undefined : togglePlay}
-        disabled={isIOS}
+        onClick={isIOS && isInAppBrowser ? undefined : togglePlay}
+        disabled={isIOS && isInAppBrowser}
         className={`fixed top-[30px] right-4 z-[9999] w-[30px] h-[30px] cursor-pointer transition-all duration-300 ${
-          isIOS ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
+          isIOS && isInAppBrowser ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
         }`}
         style={{
           position: 'fixed',
@@ -89,7 +84,7 @@ export default function Audio() {
           background: 'transparent',
           padding: '0',
         }}
-        aria-label={isIOS ? "Audio disabled on iOS" : (isPlaying ? "Pause music" : "Play music")}
+        aria-label={isIOS && isInAppBrowser ? "Audio disabled on iOS" : (isPlaying ? "Pause music" : "Play music")}
       >
         <div className="relative w-full h-full rounded-full overflow-hidden">
           <Image
@@ -101,7 +96,7 @@ export default function Audio() {
               !isIOS && isPlaying ? "animate-[spin_2s_linear_infinite]" : ""
             }`}
           />
-          {(isIOS || !isPlaying) && (
+          {((isIOS && isInAppBrowser) || !isPlaying) && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-full h-[2px] bg-white rotate-45 origin-center" />
             </div>

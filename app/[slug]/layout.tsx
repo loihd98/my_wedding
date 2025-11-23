@@ -14,13 +14,10 @@ export default function SlugLayout({
 }: {
   children: React.ReactNode
 }) {
- const isIOS = typeof window !== 'undefined' && 
-    (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
-     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
-     
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-pink-50">
-      {!isIOS ? <Audio /> : null}
+       <Audio />
       {children}
     </div>
   )
