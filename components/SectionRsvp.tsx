@@ -83,6 +83,7 @@ const SectionRsvp = () => {
                             src="/images/webp/qr_groom.webp"
                             alt="QR Code Chú rể"
                             fill
+                            priority
                             className="object-contain"
                         />
                     </div>
@@ -106,6 +107,7 @@ const SectionRsvp = () => {
                             src="/images/webp/qr_bridal.webp"
                             alt="QR Code Cô dâu"
                             fill
+                            priority
                             className="object-contain"
                         />
                     </div>

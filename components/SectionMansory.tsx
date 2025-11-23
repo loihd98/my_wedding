@@ -83,6 +83,18 @@ const SectionMansory = () => {
         return cleanup;
     }, [isIntersecting, galleryImages]);
 
+    const gradientBase64 =
+        "data:image/svg+xml;base64," +
+        btoa(
+            `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#f0f0f0"/>
+        <stop offset="100%" stop-color="#d0d0d0"/>
+      </linearGradient>
+      <rect width="10" height="10" fill="url(#g)"/>
+    </svg>`
+        );
+
     // Split images into 3 columns
     const column1 = useMemo(() => galleryImages.filter((_, index) => index % 3 === 0), [galleryImages]);
     const column2 = useMemo(() => galleryImages.filter((_, index) => index % 3 === 1), [galleryImages]);
@@ -152,7 +164,7 @@ const SectionMansory = () => {
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         quality={85}
                         placeholder="blur"
-                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+JNjbq/wADzSjTNZvmFmXMleJY/9k="
+                        blurDataURL={gradientBase64}
                         loading={image.priority ? "eager" : "lazy"}
                         priority={image.priority}
                         onLoad={handleImageLoad}

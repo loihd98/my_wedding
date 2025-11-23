@@ -10,29 +10,68 @@ export default function Audio() {
   const [isAudioSupported, setIsAudioSupported] = useState(true);
   const [userInteracted, setUserInteracted] = useState(false);
 
-  // Detect in-app browser
+  // FIXED: Correct in-app browser detection
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
     const userAgent = navigator.userAgent.toLowerCase();
+    
+    // Check for specific in-app browser signatures
     const isIAB = (
+      // Facebook apps
+      userAgent.includes('fban') ||        // Facebook App
+      userAgent.includes('fbav') ||        // Facebook App Version
       userAgent.includes('facebook') ||
+      // Instagram
       userAgent.includes('instagram') ||
+      // LINE
       userAgent.includes('line') ||
+      // Messenger
       userAgent.includes('messenger') ||
+      // Zalo
       userAgent.includes('zalo') ||
+      // Twitter
       userAgent.includes('twitter') ||
-      userAgent.includes('fban') ||
-      userAgent.includes('fbav') ||
-      // iOS Safari in-app browser detection
-      (userAgent.includes('safari') && userAgent.includes('mobile') && 
-       !userAgent.includes('chrome') && !userAgent.includes('crios'))
+      // TikTok
+      userAgent.includes('tiktok') ||
+      // WeChat
+      userAgent.includes('micromessenger') ||
+      // Telegram
+      userAgent.includes('telegram') ||
+      // LinkedIn
+      userAgent.includes('linkedinapp') ||
+      // Specific iOS in-app browser patterns (NOT regular Safari)
+      (userAgent.includes('mobile') && 
+       (userAgent.includes('fban') || userAgent.includes('fbav') || userAgent.includes('instagram')))
     );
     
-    setIsInAppBrowser(isIAB);
+    // Additional check: if it's regular Safari, it should NOT be detected as IAB
+    const isRegularSafari = (
+      userAgent.includes('safari') && 
+      userAgent.includes('mobile') &&
+      !userAgent.includes('chrome') &&
+      !userAgent.includes('crios') &&
+      !userAgent.includes('fban') &&
+      !userAgent.includes('fbav') &&
+      !userAgent.includes('instagram') &&
+      !userAgent.includes('line') &&
+      !userAgent.includes('messenger')
+    );
     
-    if (isIAB) {
+    setIsInAppBrowser(isIAB && !isRegularSafari);
+    
+    // Debug logging
+    console.log('🔍 Browser Detection:', {
+      userAgent: userAgent,
+      isIAB: isIAB,
+      isRegularSafari: isRegularSafari,
+      finalResult: isIAB && !isRegularSafari
+    });
+    
+    if (isIAB && !isRegularSafari) {
       console.log('🚨 In-app browser detected - Audio features limited for stability');
+    } else {
+      console.log('✅ Regular browser detected - Audio features enabled');
     }
   }, []);
 
