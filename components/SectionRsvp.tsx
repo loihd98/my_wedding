@@ -27,7 +27,7 @@ const SectionRsvp = () => {
             const data = {
                 ...formData,
                 timestamp: new Date().toLocaleString('vi-VN'),
-                url: window.location.href // Add current URL
+                // url: window.location.href // Removed to prevent reload issues
             };
 
             const response = await fetch('/api/submit-rsvp', {

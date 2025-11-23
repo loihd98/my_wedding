@@ -95,6 +95,7 @@ const SectionTime = ({ slug }: { slug: string }) => {
             </div>
 
             <motion.div
+                style={{ letterSpacing: '2px' }}
                 className="h-auto w-full py-10 min-w-[20px] text-black text-[17.784px] font-medium text-center leading-[1.6] tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]"
                 variants={fadeInRight}
             >
