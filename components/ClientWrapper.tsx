@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { preventHashReload, cleanupHashPrevention } from "@/lib/preventHashReload";
+// import { preventHashReload, cleanupHashPrevention } from "@/lib/preventHashReload"; // DISABLED FOR TESTING
 // import { initSmoothScroll } from "@/lib/animations"; // Disabled to prevent reload
 
 interface ClientWrapperProps {
@@ -40,7 +40,8 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     
     console.log(`Browser detection: iOS=${ios}, InApp=${inApp}`);
     
-    // Apply hash reload prevention with delay for iOS
+    // Apply hash reload prevention with delay for iOS - DISABLED FOR TESTING
+    /*
     if (inApp) {
       const delay = ios ? 1000 : 0; // Extra delay for iOS WebKit
       
@@ -60,6 +61,12 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
         console.log('[ClientWrapper] Hash prevention cleanup completed');
       };
     }
+    */
+    
+    // Return empty cleanup when prevention is disabled
+    return () => {
+      console.log('[ClientWrapper] Hash prevention disabled - no cleanup needed');
+    };
   }, []);
 
   // Disable all scroll effects to prevent reload issues

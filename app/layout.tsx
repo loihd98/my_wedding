@@ -251,7 +251,8 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="format-detection" content="telephone=no" />
         
-        {/* Hash reload prevention script - must load before framework scripts */}
+        {/* Hash reload prevention script - DISABLED FOR TESTING iOS RELOAD ISSUES */}
+        {/* 
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -306,6 +307,7 @@ export default function RootLayout({
             `,
           }}
         />
+        */}
       </head>
       <body className="antialiased">
         {children}
