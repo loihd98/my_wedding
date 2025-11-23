@@ -13,7 +13,7 @@ export default function SlugLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-pink-50">
-      {/* <Audio /> */}
+      <Audio />
       {children}
     </div>
   );

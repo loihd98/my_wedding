@@ -144,7 +144,7 @@ export default function SlugPage({ params }: PageProps) {
         <SectionTime slug={slug} />
         <SectionQuote />
         <SectionActor />
-        <SectionMansory />
+        {/* <SectionMansory /> */}
         <SectionDate />
         <SectionSaveTheDate />
         <SectionBottom />
