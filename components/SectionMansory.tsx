@@ -33,20 +33,18 @@ const SectionMansory = () => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
                         setIsIntersecting(true);
-                        // Preload first 3 images when section comes into view
-                        const priorityImages = galleryImages.slice(0, 3).map(img => img.src);
-                        preloadImages(priorityImages).catch(err => {
-                            console.error('Preload error:', err);
-                        });
+                        preloadImages(galleryImages.slice(0, 3).map(img => img.src))
+                            .catch(console.error);
+
+                        // **Disconnect ngay khi trigger lần đầu**
+                        if (sectionRef.current) observer.unobserve(sectionRef.current);
                     }
                 });
             },
             { rootMargin: '50px' }
         );
 
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
+        if (sectionRef.current) observer.observe(sectionRef.current);
 
         return () => observer.disconnect();
     }, [galleryImages, preloadImages]);
@@ -99,6 +97,8 @@ const SectionMansory = () => {
     const column1 = useMemo(() => galleryImages.filter((_, index) => index % 3 === 0), [galleryImages]);
     const column2 = useMemo(() => galleryImages.filter((_, index) => index % 3 === 1), [galleryImages]);
     const column3 = useMemo(() => galleryImages.filter((_, index) => index % 3 === 2), [galleryImages]);
+    const isIapBrowser = typeof window !== 'undefined' && /zalo|fbav|line/i.test(navigator.userAgent);
+
 
     // Image component with lazy loading and placeholder
     const ImageWithPlaceholder = ({
@@ -133,7 +133,7 @@ const SectionMansory = () => {
                 className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg bg-gray-200 transition-all duration-500`}
                 style={{
                     contain: 'layout style paint',
-                    contentVisibility: shouldLoad ? 'visible' : 'auto'
+                    contentVisibility: isIapBrowser ? 'visible' : 'auto',
                 }}
             >
                 {/* Skeleton placeholder */}
@@ -204,7 +204,7 @@ const SectionMansory = () => {
 
             {/* Optimized Masonry Grid */}
             <div className="max-w-7xl mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                     {/* Column 1 */}
                     <div className="flex flex-col gap-4">
