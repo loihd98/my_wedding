@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Audio from '@/components/Audio'
 
 export const metadata: Metadata = {
   title: {
@@ -15,6 +16,7 @@ export default function SlugLayout({
 }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-pink-50">
+      <Audio />
       {children}
     </div>
   )

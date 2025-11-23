@@ -124,9 +124,77 @@ html {
   -webkit-transform: translateZ(0);
 }
 
+/* Audio button forced positioning */
+.audio-button {
+  position: fixed !important;
+  top: 30px !important;
+  right: 16px !important;
+  z-index: 99999 !important;
+  transform: none !important;
+  margin: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
 /* Performance optimizations */
 .scroll-smooth {
   scroll-behavior: smooth;
+}
+
+/* Optimize wheel events and passive scrolling */
+* {
+  touch-action: manipulation;
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+  contain: layout style paint;
+}
+
+.will-change-transform {
+  will-change: transform;
+  contain: layout style paint;
+}
+
+/* Optimize mansory grid performance */
+.mansory-item {
+  contain: layout style paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize all framer-motion elements */
+[data-framer-name] {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Throttle scroll events */
+html {
+  scroll-behavior: smooth;
+  /* Optimize scroll performance */
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-top: 80px;
+  /* Reduce paint */
+  contain: layout style paint;
+}
+
+/* Optimize images */
+img {
+  will-change: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Reduce motion for accessibility */
@@ -142,6 +210,10 @@ html {
   
   .animate-masonry {
     animation: none !important;
+  }
+  
+  [data-framer-name] {
+    will-change: auto !important;
   }
 }
 

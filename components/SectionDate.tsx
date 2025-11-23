@@ -12,7 +12,7 @@ export const SectionDate = () => {
             className="relative max-auto w-full px-10 h-fit min-w-[20px] flex flex-col gap-10 items-center overflow-hidden py-10"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-10%" }}
+            viewport={{ once: true, margin: "-30%" }}
             variants={containerAnimation}
         >
             <Heart />

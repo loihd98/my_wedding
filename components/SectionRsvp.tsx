@@ -56,30 +56,19 @@ const SectionRsvp = () => {
             className="relative max-auto w-full bg-white  pt-10 h-fit min-w-[20px] flex flex-col items-center overflow-hidden"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-10%" }}
+            viewport={{ once: true, margin: "-30%" }}
             variants={containerAnimation}
         >
             <Heart />
-            <motion.div
-                animate={{
-                    scale: [1, 1.1, 1],
-                    rotate: [0, -2, 2, -2, 0]
-                }}
-                transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    ease: "easeInOut"
-                }}
-            >
+            <div>
                 <Image
                     src="/images/present.png"
-                    alt="QR Code Chú rể"
+                    alt="Present gift"
                     width={100}
                     height={100}
                     className="object-cover my-10"
                 />
-            </motion.div>
+            </div>
             <div className="w-full max-w-md space-y-6 mt-8">
                 {/* Block 1 - Chú rể */}
                 <div className="border-2 w-[350px] h-[350px] mx-auto border-gray-300 rounded-lg p-6 flex flex-col items-center bg-white">

@@ -12,7 +12,8 @@ export const useScrollAnimation = (
   const ref = useRef(null);
   const inView = useInView(ref, {
     once: true,
-    margin: "-10%",
+    margin: "-30%", // Increased margin to reduce early triggers
+    amount: 0.3, // Only trigger when 30% visible
   });
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export const useScrollAnimation = (
       x: 0,
       y: 0,
       transition: {
-        duration: 0.8,
+        duration: 0.3,
         delay: delay,
         ease: "easeOut",
       },
@@ -44,19 +45,19 @@ export const useScrollAnimation = (
 
 // Animation variants cho các loại khác nhau
 export const fadeInLeft = {
-  hidden: { opacity: 0, x: -100 },
+  hidden: { opacity: 0, x: -50 }, // Reduced movement
   visible: {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.3, // Faster animation
       ease: "easeOut",
     },
   },
 };
 
 export const fadeInRight = {
-  hidden: { opacity: 0, x: 100 },
+  hidden: { opacity: 0, x: 50 }, // Reduced movement
   visible: {
     opacity: 1,
     x: 0,

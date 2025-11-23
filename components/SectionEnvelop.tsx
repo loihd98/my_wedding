@@ -12,7 +12,7 @@ export const SectionEnvelop = ({ slug }: { slug: "groom" | "bridal" }) => {
       className="bg-white relative max-auto w-full px-3 py-2 min-h-[450px] h-fit min-w-[20px] flex flex-col items-center overflow-hidden"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-10%" }}
+      viewport={{ once: true, margin: "-30%" }}
       variants={containerAnimation}
     >
       <motion.div

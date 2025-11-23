@@ -51,8 +51,21 @@ export default function Audio() {
 
       <button
         onClick={togglePlay}
-        className="fixed top-4 right-4 z-50 w-[30px] h-[30px] cursor-pointer transition-all duration-300 hover:scale-110"
+        className="audio-button"
+        style={{ 
+          position: 'fixed', 
+          top: '30px', 
+          right: '16px', 
+          zIndex: 99999,
+          width: '30px',
+          height: '30px',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          transform: 'none'
+        }}
         aria-label={isPlaying ? "Pause music" : "Play music"}
+        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
       >
         <div className="relative w-full h-full rounded-full overflow-hidden">
           <Image

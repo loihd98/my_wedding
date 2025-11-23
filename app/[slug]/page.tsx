@@ -124,7 +124,6 @@ export default function SlugPage({ params }: PageProps) {
         {/* <Navigation currentSlug={slug} /> */}
 
         {/* Audio Component */}
-        <Audio />
 
         {/* All Sections */}
         <SectionEnvelop slug={slug} />
