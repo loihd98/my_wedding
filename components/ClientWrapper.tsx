@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { preventHashReload } from "@/lib/preventHashReload";
+import { preventHashReload, cleanupHashPrevention } from "@/lib/preventHashReload";
 // import { initSmoothScroll } from "@/lib/animations"; // Disabled to prevent reload
 
 interface ClientWrapperProps {
@@ -28,13 +28,38 @@ const detectInAppBrowser = () => {
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
   const [isInAppBrowser, setIsInAppBrowser] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    setIsInAppBrowser(detectInAppBrowser());
-    console.log('Browser type:', isInAppBrowser ? 'In-app browser' : 'Regular browser');
+    const inApp = detectInAppBrowser();
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     
-    // Initialize hash reload prevention immediately
-    preventHashReload();
+    setIsInAppBrowser(inApp);
+    setIsIOS(ios);
+    
+    console.log(`Browser detection: iOS=${ios}, InApp=${inApp}`);
+    
+    // Apply hash reload prevention with delay for iOS
+    if (inApp) {
+      const delay = ios ? 1000 : 0; // Extra delay for iOS WebKit
+      
+      const timeoutId = setTimeout(() => {
+        try {
+          preventHashReload();
+          console.log('[ClientWrapper] iOS-safe hash reload prevention applied');
+        } catch (error) {
+          console.log('[ClientWrapper] Hash reload prevention failed:', error);
+        }
+      }, delay);
+      
+      // Cleanup function
+      return () => {
+        clearTimeout(timeoutId);
+        cleanupHashPrevention();
+        console.log('[ClientWrapper] Hash prevention cleanup completed');
+      };
+    }
   }, []);
 
   // Disable all scroll effects to prevent reload issues
