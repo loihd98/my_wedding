@@ -18,7 +18,7 @@ const SectionTime = ({ slug }: { slug: string }) => {
                 className="h-auto w-full min-w-[20px] text-[rgb(186,165,138)] text-[39.312px] font-medium text-center leading-[1.59] tracking-normal normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]"
                 variants={fadeInRight}
             >
-                {slug === 'groom' ? '11 GIỜ 30' : '11 GIỜ'} | CHỦ NHẬT | 30.11.2025
+                {slug === 'groom' ? '11 GIỜ 30 và 04 GIỜ 30' : '11 GIỜ'} | CHỦ NHẬT | 30.11.2025
             </motion.span>
             <span className="h-auto w-full min-w-[20px] text-[rgb(0,0,0)] text-[18.72px] font-medium text-center leading-normal tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]">
                 (Nhằm ngày 11 tháng 10 năm Ất Tỵ)

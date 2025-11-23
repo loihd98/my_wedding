@@ -65,7 +65,7 @@ export default function Audio() {
   return (
     <>
       {/* Only render audio element on non-iOS devices */}
-      {!isIOS && <audio ref={audioRef} src="/audio/my_love.mp3" loop />}
+      {!isIOS && !isInAppBrowser && <audio ref={audioRef} src="/audio/my_love.mp3" loop />}
 
       <button
         onClick={isIOS && isInAppBrowser ? undefined : togglePlay}

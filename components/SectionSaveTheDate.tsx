@@ -43,8 +43,8 @@ const SectionSaveTheDate = () => {
                 className="flex flex-col items-center absolute h-auto w-full min-w-[20px] text-white text-[24.336px] bottom-[50px] font-medium text-center leading-[1.52] tracking-normal normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-madam-ghea [text-shadow:0_0_2px_rgba(0,0,0,0)]"
                 variants={fadeInLeft}
             >
-                <span>Thứ Bảy, 22/05/2050 </span>
-                <span>Âm lịch 22/4 | 12:00 PM</span>
+                <span>Chủ Nhật, 30/11/2025 </span>
+                <span>Âm lịch 11/10 | 11:30 AM và 04:30 PM</span>
             </motion.div>
             <DateBoard className="absolute left-[75px] bottom-[180px] z-[101]" />
         </motion.div>

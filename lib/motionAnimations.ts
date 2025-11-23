@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 
-// Hook để tạo animation khi element vào viewport
+// Optimized hook - reduced complexity và tăng performance
 export const useScrollAnimation = (
   direction: "left" | "right" | "up" | "down" = "up",
   delay = 0
@@ -12,8 +12,8 @@ export const useScrollAnimation = (
   const ref = useRef(null);
   const inView = useInView(ref, {
     once: true,
-    margin: "-30%", // Increased margin to reduce early triggers
-    amount: 0.3, // Only trigger when 30% visible
+    margin: "-20%", // Optimized margin
+    amount: 0.2, // Reduced threshold
   });
 
   useEffect(() => {
@@ -25,15 +25,15 @@ export const useScrollAnimation = (
   const variants = {
     hidden: {
       opacity: 0,
-      x: direction === "left" ? -100 : direction === "right" ? 100 : 0,
-      y: direction === "up" ? 50 : direction === "down" ? -50 : 0,
+      x: direction === "left" ? -30 : direction === "right" ? 30 : 0, // Reduced movement
+      y: direction === "up" ? 30 : direction === "down" ? -30 : 0, // Reduced movement
     },
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
       transition: {
-        duration: 0.3,
+        duration: 0.4, // Faster animation
         delay: delay,
         ease: "easeOut",
       },
@@ -43,87 +43,86 @@ export const useScrollAnimation = (
   return { ref, controls, variants };
 };
 
-// Animation variants cho các loại khác nhau
+// Optimized animation variants - faster và smoother
 export const fadeInLeft = {
-  hidden: { opacity: 0, x: -50 }, // Reduced movement
+  hidden: { opacity: 0, x: -20 }, // Reduced movement
   visible: {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.3, // Faster animation
+      duration: 0.4, // Faster animation
       ease: "easeOut",
     },
   },
 };
 
 export const fadeInRight = {
-  hidden: { opacity: 0, x: 50 }, // Reduced movement
+  hidden: { opacity: 0, x: 20 }, // Reduced movement
   visible: {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.4, // Faster animation
       ease: "easeOut",
     },
   },
 };
 
 export const fadeInUp = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 20 }, // Reduced movement
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.4,
       ease: "easeOut",
     },
   },
 };
 
 export const fadeInDown = {
-  hidden: { opacity: 0, y: -50 },
+  hidden: { opacity: 0, y: -20 }, // Reduced movement
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
+      duration: 0.4,
       ease: "easeOut",
     },
   },
 };
 
-// Animation cho ảnh (từ dưới lên)
+// Simplified image animation - no scale to improve performance
 export const imageAnimation = {
-  hidden: { opacity: 0, y: 80, scale: 0.9 },
+  hidden: { opacity: 0, y: 30 }, // Removed scale
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
-      duration: 1,
+      duration: 0.5, // Faster animation
       ease: "easeOut",
     },
   },
 };
 
-// Animation cho container với stagger children
+// Simplified container animation
 export const containerAnimation = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.1, // Reduced stagger
     },
   },
 };
 
-// Animation cho text với typewriter effect
+// Simplified text animation
 export const textAnimation = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      duration: 0.6,
+      duration: 0.3, // Faster animation
       ease: "easeInOut",
     },
   },
