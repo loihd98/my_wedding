@@ -142,41 +142,28 @@ html {
   padding: 0 !important;
 }
 
-/* Performance optimizations */
+/* Basic styles only - no advanced optimizations */
 .scroll-smooth {
   scroll-behavior: smooth;
 }
 
-/* In-app browser optimizations */
-html {
-  /* Prevent bounce scrolling in iOS in-app browsers */
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
+/* Simple in-app browser fixes */
+html, body {
+  overflow-x: hidden;
 }
 
 body {
-  /* Prevent pull-to-refresh in in-app browsers */
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
-  /* Disable text selection to prevent unwanted behaviors */
+  /* Minimal touch optimizations */
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
-/* Allow text selection for form inputs and content */
-input, textarea, [contenteditable="true"], p, h1, h2, h3, h4, h5, h6 {
+/* Allow text selection for essential elements */
+input, textarea, p, h1, h2, h3, h4, h5, h6 {
   -webkit-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
   user-select: text;
 }
-
-/* Optimize wheel events and passive scrolling */
 * {
   touch-action: manipulation;
 }

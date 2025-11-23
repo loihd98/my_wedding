@@ -4,44 +4,44 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 
 const SectionMansory = () => {
-    // Setup passive event listeners for better scroll performance
-    useEffect(() => {
-        // Detect in-app browser
-        const isInAppBrowser = typeof window !== 'undefined' && (
-            navigator.userAgent.toLowerCase().includes('facebook') ||
-            navigator.userAgent.toLowerCase().includes('instagram') ||
-            navigator.userAgent.toLowerCase().includes('line') ||
-            navigator.userAgent.toLowerCase().includes('messenger') ||
-            navigator.userAgent.toLowerCase().includes('zalo')
-        );
+    // Disable all event listeners to prevent reload issues
+    // useEffect(() => {
+    //     // Detect in-app browser
+    //     const isInAppBrowser = typeof window !== 'undefined' && (
+    //         navigator.userAgent.toLowerCase().includes('facebook') ||
+    //         navigator.userAgent.toLowerCase().includes('instagram') ||
+    //         navigator.userAgent.toLowerCase().includes('line') ||
+    //         navigator.userAgent.toLowerCase().includes('messenger') ||
+    //         navigator.userAgent.toLowerCase().includes('zalo')
+    //     );
 
-        // Skip passive listeners for in-app browsers to prevent issues
-        if (isInAppBrowser) {
-            console.log('In-app browser detected, skipping passive listeners');
-            return;
-        }
+    //     // Skip passive listeners for in-app browsers to prevent issues
+    //     if (isInAppBrowser) {
+    //         console.log('In-app browser detected, skipping passive listeners');
+    //         return;
+    //     }
 
-        const handleWheel = (e: WheelEvent) => {
-            // Passive wheel event handler - no preventDefault needed
-        };
+    //     const handleWheel = (e: WheelEvent) => {
+    //         // Passive wheel event handler - no preventDefault needed
+    //     };
 
-        const handleTouchMove = (e: TouchEvent) => {
-            // Passive touch event handler
-        };
+    //     const handleTouchMove = (e: TouchEvent) => {
+    //         // Passive touch event handler
+    //     };
 
-        // Add passive event listeners only for regular browsers
-        const addPassiveListeners = () => {
-            document.addEventListener('wheel', handleWheel, { passive: true });
-            document.addEventListener('touchmove', handleTouchMove, { passive: true });
-        };
+    //     // Add passive event listeners only for regular browsers
+    //     const addPassiveListeners = () => {
+    //         document.addEventListener('wheel', handleWheel, { passive: true });
+    //         document.addEventListener('touchmove', handleTouchMove, { passive: true });
+    //     };
 
-        addPassiveListeners();
+    //     addPassiveListeners();
 
-        return () => {
-            document.removeEventListener('wheel', handleWheel);
-            document.removeEventListener('touchmove', handleTouchMove);
-        };
-    }, []);
+    //     return () => {
+    //         document.removeEventListener('wheel', handleWheel);
+    //         document.removeEventListener('touchmove', handleTouchMove);
+    //     };
+    // }, []);
 
     // Mock data for wedding gallery images
     const galleryImages = [
@@ -64,7 +64,7 @@ const SectionMansory = () => {
     const column3 = galleryImages.filter((_, index) => index % 3 === 2);
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-16 pb-5 will-change-scroll">
+        <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-16 pb-5">
             {/* Section Header */}
             <div className="text-center py-12 px-4">
                 <h2 className="text-4xl md:text-5xl h-auto w-full min-w-[20px] text-[rgb(186,165,138)] text-[39.312px] font-medium text-center leading-[1.22] tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-signora [text-shadow:0_0_2px_rgba(0,0,0,0)]">
@@ -75,24 +75,22 @@ const SectionMansory = () => {
                 </p>
             </div>
 
-            {/* Static Masonry Grid */}
-            <div className="max-w-7xl mx-auto px-4 will-change-transform">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transform-gpu">
+            {/* Static Masonry Grid - Simplified */}
+            <div className="max-w-7xl mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                     {/* Column 1 */}
                     <div className="flex flex-col gap-4">
                         {column1.map((image, index) => (
                             <div
                                 key={`col1-${index}`}
-                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg group bg-gray-100 transform-gpu will-change-transform`}
-                                onClick={(e) => e.preventDefault()}
-                                style={{ contain: 'layout style paint' }}
+                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg bg-gray-100`}
                             >
                                 <Image
                                     src={image.src}
                                     alt={image.alt}
                                     fill
-                                    className="object-cover transition-transform duration-500 ease-out"
+                                    className="object-cover"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     {...(index === 0 ? { priority: true } : { loading: 'lazy' as const })}
                                 />
@@ -105,15 +103,13 @@ const SectionMansory = () => {
                         {column2.map((image, index) => (
                             <div
                                 key={`col2-${index}`}
-                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg group bg-gray-100 transform-gpu will-change-transform`}
-                                onClick={(e) => e.preventDefault()}
-                                style={{ contain: 'layout style paint' }}
+                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg bg-gray-100`}
                             >
                                 <Image
                                     src={image.src}
                                     alt={image.alt}
                                     fill
-                                    className="object-cover transition-transform duration-500 ease-out"
+                                    className="object-cover"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                                     {...(index === 0 ? { priority: true } : { loading: 'lazy' as const })}
                                 />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { initSmoothScroll } from "@/lib/animations";
+// import { initSmoothScroll } from "@/lib/animations"; // Disabled to prevent reload
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -30,19 +30,21 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   
   useEffect(() => {
     setIsInAppBrowser(detectInAppBrowser());
+    console.log('Browser type:', isInAppBrowser ? 'In-app browser' : 'Regular browser');
   }, []);
 
-  useEffect(() => {
-    // Skip smooth scroll for in-app browsers to prevent reload issues
-    if (isInAppBrowser) {
-      console.log('In-app browser detected, skipping smooth scroll');
-      return;
-    }
+  // Disable all scroll effects to prevent reload issues
+  // useEffect(() => {
+  //   // Skip smooth scroll for in-app browsers to prevent reload issues
+  //   if (isInAppBrowser) {
+  //     console.log('In-app browser detected, skipping smooth scroll');
+  //     return;
+  //   }
 
-    // Initialize Lenis smooth scroll only for regular browsers
-    const cleanup = initSmoothScroll();
-    return cleanup;
-  }, [isInAppBrowser]);
+  //   // Initialize Lenis smooth scroll only for regular browsers
+  //   const cleanup = initSmoothScroll();
+  //   return cleanup;
+  // }, [isInAppBrowser]);
 
   return <>{children}</>;
 }
