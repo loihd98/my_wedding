@@ -1,0 +1,25 @@
+services:
+  wedding-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: wedding-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env.production
+    networks:
+      - wedding-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  wedding-network:
+    driver: bridge

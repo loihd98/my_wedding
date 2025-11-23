@@ -8,9 +8,8 @@ yarn-error.log*
 .next
 out
 
-# Environment files
+# Environment files - Keep .env.production for Docker build
 .env*.local
-.env.production
 
 # Logs
 logs

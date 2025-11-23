@@ -5,14 +5,15 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (production only for smaller image)
+RUN npm ci --only=production --omit=dev
 
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application với standalone output
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 RUN npm run build
 
 # Create user for security
@@ -29,4 +30,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
+# Start the standalone server
 CMD ["node", "server.js"]

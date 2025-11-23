@@ -1,24 +1,24 @@
-# 🚀 Hướng Dẫn Deploy Wedding Site Lên VPS Production
+# 🐳 Hướng Dẫn Deploy Wedding Site Lên VPS với Docker
 
-**Thông tin server:**
+**Thông tin VPS:**
 
 - **IP**: 103.199.17.168
 - **Domain**: loihangwedding.io.vn
-- **OS**: Ubuntu 20+ (Fresh Installation)
-- **Tech Stack**: Next.js + Docker + Nginx + SSL
+- **OS**: Ubuntu Server 20.04 LTS (Focal Fossa) Minimal
+- **Tech Stack**: Next.js + Docker + Docker Compose + Nginx + SSL
 
 ---
 
 ## 📋 Yêu Cầu Trước Khi Bắt Đầu
 
-1. ✅ VPS Ubuntu 20+ đã setup
+1. ✅ VPS Ubuntu 20.04 LTS đã setup
 2. ✅ Domain `loihangwedding.io.vn` đã trỏ A record về IP `103.199.17.168`
-3. ✅ SSH access với quyền root hoặc sudo
+3. ✅ SSH access với quyền root
 4. ✅ Source code đã push lên GitHub repository
 
 ---
 
-## 🔧 BƯỚC 1: Kết Nối và Setup Server Cơ Bản
+## 🔧 BƯỚC 1: Kết Nối SSH và Setup Server Cơ Bản
 
 ### 1.1 SSH vào server
 
@@ -35,10 +35,10 @@ apt update && apt upgrade -y
 ### 1.3 Cài đặt các tools cần thiết
 
 ```bash
-apt install -y curl wget git nano ufw htop unzip software-properties-common
+apt install -y curl wget git nano ufw htop unzip software-properties-common ca-certificates gnupg lsb-release
 ```
 
-### 1.4 Tạo user deploy (bảo mật)
+### 1.4 Tạo user deploy
 
 ```bash
 # Tạo user mới
@@ -74,7 +74,7 @@ sudo ufw status verbose
 
 ## 🐳 BƯỚC 3: Cài Đặt Docker và Docker Compose
 
-### 3.1 Cài đặt Docker (Phương pháp Recommended)
+### 3.1 Cài đặt Docker (Phương pháp Official)
 
 ```bash
 # Xóa Docker cũ và repository lỗi (nếu có)
@@ -93,10 +93,10 @@ sudo apt-get install -y \
 # Tạo thư mục keyrings
 sudo mkdir -p /etc/apt/keyrings
 
-# Thêm Docker GPG key (đảm bảo URL đúng)
+# Thêm Docker GPG key
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-# Thêm Docker repository với syntax đúng
+# Thêm Docker repository
 echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -107,28 +107,10 @@ sudo apt-get update
 # Cài đặt Docker Engine
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-# Thêm user deploy vào Docker group (thay vì $USER)
+# Thêm user deploy vào Docker group
 sudo usermod -aG docker deploy
 
 # Enable và start Docker service
-sudo systemctl enable docker
-sudo systemctl start docker
-```
-
-### 3.1.1 Phương pháp Alternative (nếu gặp lỗi repository)
-
-```bash
-# Sử dụng script cài đặt tự động của Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-
-# Thêm user vào Docker group
-sudo usermod -aG docker deploy
-
-# Clean up script
-rm get-docker.sh
-
-# Start Docker service
 sudo systemctl enable docker
 sudo systemctl start docker
 ```
@@ -163,75 +145,11 @@ ssh deploy@103.199.17.168
 docker --version
 docker-compose --version
 
-# Test Docker với sudo (nếu group chưa áp dụng)
-sudo docker run hello-world
-
-# Test Docker không cần sudo (sau khi login lại)
+# Test Docker không cần sudo
 docker run hello-world
 
 # Kiểm tra Docker service status
 sudo systemctl status docker
-```
-
-### 3.5 Troubleshooting Docker Issues
-
-**Nếu gặp lỗi "ttps" hoặc repository không tìm thấy:**
-
-```bash
-# Xóa repository lỗi
-sudo rm -f /etc/apt/sources.list.d/docker.list
-
-# Xóa GPG key cũ
-sudo rm -f /etc/apt/keyrings/docker.gpg
-
-# Sử dụng script tự động
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker deploy
-```
-
-**Nếu Docker service không tồn tại (Unit docker.service could not be found):**
-
-```bash
-# Gỡ cài đặt hoàn toàn Docker cũ
-sudo apt-get purge -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-sudo apt-get purge -y docker docker-engine docker.io containerd runc
-sudo apt autoremove -y
-
-# Xóa thư mục và file Docker
-sudo rm -rf /var/lib/docker
-sudo rm -rf /etc/docker
-sudo rm -rf /var/run/docker.sock
-sudo rm -f /etc/apt/sources.list.d/docker.list
-sudo rm -f /etc/apt/keyrings/docker.gpg
-
-# Cài lại Docker bằng script official
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-rm get-docker.sh
-
-# Setup Docker service
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo usermod -aG docker deploy
-sudo chmod 666 /var/run/docker.sock
-
-# Test Docker
-sudo docker --version
-sudo systemctl status docker
-```
-
-**Nếu Docker service không start:**
-
-```bash
-# Restart Docker service
-sudo systemctl restart docker
-
-# Kiểm tra logs
-sudo journalctl -u docker.service
-
-# Kiểm tra Docker daemon
-sudo dockerd --debug
 ```
 
 ---
@@ -271,7 +189,7 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "no-referrer-when-downgrade" always;
 
-    # Proxy to Next.js app
+    # Proxy to Docker container
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
@@ -370,13 +288,13 @@ sudo certbot --nginx -d loihangwedding.io.vn -d www.loihangwedding.io.vn
 # Test auto-renewal
 sudo certbot renew --dry-run
 
-# Kiểm tra cron job auto-renewal (thường đã tự động setup)
+# Kiểm tra cron job auto-renewal
 sudo systemctl list-timers | grep certbot
 ```
 
 ---
 
-## 📦 BƯỚC 6: Clone Project và Setup
+## 📦 BƯỚC 6: Clone Project và Setup Docker Files
 
 ### 6.1 Clone source code
 
@@ -419,7 +337,7 @@ ADMIN_PASSWORD=your-super-secure-admin-password-2024
 nano Dockerfile
 ```
 
-**Nội dung Dockerfile (production-ready với network fix):**
+**Nội dung Dockerfile (production-ready với standalone output):**
 
 ```dockerfile
 FROM node:20-bookworm-slim
@@ -430,13 +348,14 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci --only=production --omit=dev
 
 # Copy source code
 COPY . .
 
-# Build the application directly
-ENV NEXT_TELEMETRY_DISABLED 1
+# Build the application với standalone output
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 RUN npm run build
 
 # Create user for security
@@ -450,51 +369,20 @@ USER appuser
 
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME 0.0.0.0
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 
-CMD ["npm", "start"]
+# Start the standalone server
+CMD ["node", "server.js"]
 ```
 
-### 6.4 Cập nhật next.config.js cho standalone
-
-```bash
-nano next.config.js
-```
-
-**Đảm bảo có `output: 'standalone'`:**
-
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: "standalone",
-  images: {
-    formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
-    ],
-  },
-  poweredByHeader: false,
-  compress: true,
-  reactStrictMode: true,
-  swcMinify: true,
-};
-
-module.exports = nextConfig;
-```
-
-### 6.5 Tạo docker-compose.yml
+### 6.4 Tạo docker-compose.yml
 
 ```bash
 nano docker-compose.yml
 ```
 
-**Nội dung docker-compose.yml (bỏ version để tránh warning):**
+**Nội dung docker-compose.yml:**
 
 ```yaml
 services:
@@ -512,13 +400,19 @@ services:
       - .env.production
     networks:
       - wedding-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 networks:
   wedding-network:
     driver: bridge
 ```
 
-### 6.6 Tạo .dockerignore để tối ưu build
+### 6.5 Tạo .dockerignore để tối ưu build
 
 ```bash
 nano .dockerignore
@@ -539,20 +433,31 @@ npm-debug.log
 .env.development.local
 .env.test.local
 .env.production.local
+.vscode
+.DS_Store
+*.log
+coverage
+.nyc_output
+.cache
+dist
+build
+logs
+*.tgz
+*.tar.gz
 ```
 
 ---
 
-## 🚀 BƯỚC 7: Build và Deploy
+## 🚀 BƯỚC 7: Build và Deploy với Docker
 
 ### 7.1 Build Docker image
 
 ```bash
 # Build image với Docker Compose
-docker-compose build
+docker-compose build --no-cache
 
-# Hoặc build manual (nếu cần debug)
-# docker build -t wedding-app .
+# Kiểm tra image được tạo
+docker images
 ```
 
 ### 7.2 Chạy application
@@ -561,187 +466,24 @@ docker-compose build
 # Start với Docker Compose
 docker-compose up -d
 
-# Kiểm tra logs realtime
+# Kiểm tra container status
+docker ps
+
+# Kiểm tra logs
 docker-compose logs -f wedding-app
 ```
 
-### 7.3 Kiểm tra container chạy
+### 7.3 Kiểm tra container health
 
 ```bash
-# Xem container status
-docker ps
+# Xem container health status
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
-# Kiểm tra logs (nếu có lỗi)
-docker logs wedding-app
-
-# Test app locally trước khi test qua Nginx
+# Test app locally
 curl http://localhost:3000
 
 # Kiểm tra port 3000 có mở không
 sudo netstat -tulpn | grep :3000
-```
-
-### 7.5 Troubleshooting Docker Build Issues
-
-**Nếu build bị lỗi Alpine package repository:**
-
-```bash
-# Kiểm tra Alpine version và package availability
-docker run --rm node:20-alpine apk info
-
-# Alternative 1: Sử dụng Ubuntu base image thay vì Alpine (recommended)
-# Tạo Dockerfile.ubuntu
-cat > Dockerfile.ubuntu << 'EOF'
-FROM node:20-slim AS base
-
-FROM base AS deps
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libc6-dev \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-WORKDIR /app
-
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN \
-  if [ -f yarn.lock ]; then yarn build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-CMD ["node", "server.js"]
-EOF
-
-# Build với Ubuntu base image
-docker build -f Dockerfile.ubuntu -t wedding-app .
-```
-
-**Alternative 2: Fix Alpine với package mirrors:**
-
-```bash
-# Tạo Dockerfile với Alpine mirrors khác
-cat > Dockerfile.alpine-fixed << 'EOF'
-FROM node:20-alpine AS base
-
-FROM base AS deps
-# Sử dụng mirrors khác cho Alpine
-RUN sed -i 's|dl-cdn.alpinelinux.org|alpine.global.ssl.fastly.net|g' /etc/apk/repositories && \
-    apk update && apk add --no-cache gcompat
-
-WORKDIR /app
-
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN \
-  if [ -f yarn.lock ]; then yarn build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-CMD ["node", "server.js"]
-EOF
-
-# Build với Alpine fixed
-docker build -f Dockerfile.alpine-fixed -t wedding-app .
-```
-
-**Alternative 3: Build simple với current working Alpine:**
-
-```bash
-# Build với cache disabled
-docker-compose build --no-cache
-
-# Hoặc build manual (nếu cần debug)
-# docker build -t wedding-app .
-```
-
-**Nếu container không start:**
-
-```bash
-# Kiểm tra logs chi tiết
-docker logs wedding-app
-
-# Kiểm tra environment variables
-docker exec wedding-app env
-
-# Test chạy container interactive để debug
-docker run -it --rm wedding-app sh
 ```
 
 ---
@@ -751,6 +493,9 @@ docker run -it --rm wedding-app sh
 ### 8.1 Test HTTP (trước khi có SSL)
 
 ```bash
+# Test container health
+curl http://localhost:3000
+
 # Test Nginx proxy
 curl -H "Host: loihangwedding.io.vn" http://103.199.17.168
 
@@ -792,7 +537,7 @@ nano ~/update-website.sh
 #!/bin/bash
 set -e
 
-echo "🚀 Updating Wedding Website..."
+echo "🚀 Updating Wedding Website with Docker..."
 
 # Go to project directory
 cd /home/deploy/my_wedding
@@ -801,22 +546,30 @@ cd /home/deploy/my_wedding
 echo "📥 Pulling latest code..."
 git pull origin master
 
-# Stop current container
-echo "🛑 Stopping current container..."
+# Stop current containers
+echo "🛑 Stopping current containers..."
 docker-compose down
 
+# Remove old image to force rebuild
+echo "🗑️ Removing old Docker image..."
+docker rmi wedding-app_wedding-app 2>/dev/null || echo "No old image to remove"
+
 # Rebuild and restart
-echo "🔄 Rebuilding Docker container..."
+echo "🔄 Rebuilding Docker containers..."
 docker-compose build --no-cache
 docker-compose up -d
 
 # Wait for container to be ready
 echo "⏳ Waiting for container to start..."
-sleep 10
+sleep 15
 
 # Check container status
 echo "🔍 Checking container status..."
 docker ps | grep wedding-app
+
+# Check health
+echo "🏥 Checking container health..."
+docker inspect wedding-app --format='{{.State.Health.Status}}' || echo "No health check configured"
 
 # Show recent logs
 echo "📋 Recent container logs:"
@@ -862,11 +615,19 @@ tar -czf $BACKUP_DIR/wedding_backup_$DATE.tar.gz \
     $PROJECT_DIR
 
 # Backup Docker image
-docker save wedding-app:latest | gzip > $BACKUP_DIR/wedding_docker_$DATE.tar.gz
+docker save $(docker images --format "{{.Repository}}:{{.Tag}}" | grep wedding-app | head -1) | gzip > $BACKUP_DIR/wedding_docker_$DATE.tar.gz
+
+# Backup Docker compose and environment files
+cp $PROJECT_DIR/docker-compose.yml $BACKUP_DIR/docker-compose_$DATE.yml
+cp $PROJECT_DIR/.env.production $BACKUP_DIR/env_production_$DATE
+cp $PROJECT_DIR/Dockerfile $BACKUP_DIR/Dockerfile_$DATE
 
 # Keep only last 7 backups
 find $BACKUP_DIR -name "wedding_backup_*.tar.gz" -mtime +7 -delete
 find $BACKUP_DIR -name "wedding_docker_*.tar.gz" -mtime +7 -delete
+find $BACKUP_DIR -name "docker-compose_*.yml" -mtime +7 -delete
+find $BACKUP_DIR -name "env_production_*" -mtime +7 -delete
+find $BACKUP_DIR -name "Dockerfile_*" -mtime +7 -delete
 
 echo "✅ Backup completed: $BACKUP_DIR/"
 ```
@@ -890,13 +651,44 @@ crontab -e
 
 # SSL renewal check (redundant but safe)
 0 2 * * 0 /usr/bin/certbot renew --quiet
+
+# Docker system cleanup weekly
+0 4 * * 0 docker system prune -f
 ```
 
 ---
 
 ## 📊 BƯỚC 10: Monitoring và Logs
 
-### 10.1 Tạo script monitoring
+### 10.1 Docker Commands hữu ích
+
+```bash
+# Xem containers đang chạy
+docker ps
+
+# Xem tất cả containers
+docker ps -a
+
+# Xem logs realtime
+docker-compose logs -f wedding-app
+
+# Xem logs với timestamp
+docker-compose logs -t wedding-app
+
+# Restart container
+docker-compose restart wedding-app
+
+# Stop containers
+docker-compose down
+
+# Start containers
+docker-compose up -d
+
+# Rebuild và restart
+docker-compose up -d --build
+```
+
+### 10.2 Tạo script monitoring
 
 ```bash
 nano ~/check-status.sh
@@ -907,14 +699,14 @@ nano ~/check-status.sh
 ```bash
 #!/bin/bash
 
-echo "🔍 Wedding Website Status Check"
-echo "================================"
+echo "🔍 Wedding Website Docker Status Check"
+echo "====================================="
 
 echo "📅 Date: $(date)"
 echo ""
 
 echo "🐳 Docker Status:"
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}\t{{.Image}}"
 echo ""
 
 echo "🌐 Nginx Status:"
@@ -929,12 +721,20 @@ echo "💾 Disk Usage:"
 df -h / | tail -n 1
 echo ""
 
+echo "🐳 Docker System Info:"
+docker system df
+echo ""
+
+echo "📊 Container Resource Usage:"
+docker stats --no-stream wedding-app 2>/dev/null || echo "Container not running"
+echo ""
+
 echo "🔗 Website Response:"
 curl -s -o /dev/null -w "Status: %{http_code}, Time: %{time_total}s\n" https://loihangwedding.io.vn
 
 echo ""
-echo "📋 Recent Logs:"
-docker logs wedding-app --tail=5
+echo "📋 Recent Container Logs:"
+docker logs wedding-app --tail=5 2>/dev/null || echo "No logs available"
 ```
 
 ```bash
@@ -945,24 +745,32 @@ chmod +x ~/check-status.sh
 
 ## 🎯 BƯỚC 11: Production Optimization
 
-### 11.1 Cấu hình log rotation
+### 11.1 Cấu hình Docker log rotation
 
 ```bash
-sudo nano /etc/logrotate.d/wedding-app
+# Tạo file daemon.json cho Docker
+sudo nano /etc/docker/daemon.json
 ```
 
 **Nội dung:**
 
-```
-/var/lib/docker/containers/*/*-json.log {
-    daily
-    rotate 7
-    missingok
-    notifempty
-    sharedscripts
-    copytruncate
-    compress
+```json
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "5"
+  }
 }
+```
+
+```bash
+# Restart Docker service
+sudo systemctl restart docker
+
+# Restart containers
+docker-compose down
+docker-compose up -d
 ```
 
 ### 11.2 Setup fail2ban cho bảo mật
@@ -1013,20 +821,16 @@ sudo systemctl start fail2ban
 curl -I https://loihangwedding.io.vn
 curl -I https://www.loihangwedding.io.vn
 
-# 3. Test form RSVP (nếu có)
-# Mở browser và test form
+# 3. Test Docker health
+docker inspect wedding-app --format='{{.State.Health.Status}}'
 
-# 4. Kiểm tra SSL grade
-# Truy cập: https://www.ssllabs.com/ssltest/analyze.html?d=loihangwedding.io.vn
+# 4. Test performance
+curl -w "@curl-format.txt" -o /dev/null -s https://loihangwedding.io.vn
 ```
 
-### 12.2 Performance test
+### 12.2 Tạo curl format file
 
 ```bash
-# Test load time
-curl -w "@curl-format.txt" -o /dev/null -s https://loihangwedding.io.vn
-
-# Tạo file curl-format.txt
 cat > curl-format.txt << 'EOF'
      time_namelookup:  %{time_namelookup}\n
         time_connect:  %{time_connect}\n
@@ -1050,28 +854,22 @@ EOF
 
 ### ✅ Những gì đã hoàn thành:
 
-1. ✅ VPS Ubuntu 20+ được setup và bảo mật
-2. ✅ Docker + Docker Compose đã cài đặt
+1. ✅ VPS Ubuntu 20.04 LTS được setup và bảo mật
+2. ✅ Docker + Docker Compose containerization
 3. ✅ Nginx reverse proxy với caching
 4. ✅ SSL certificate từ Let's Encrypt (auto-renewal)
-5. ✅ Next.js app chạy trong Docker container
+5. ✅ Next.js app chạy trong Docker container với standalone output
 6. ✅ Monitoring và backup scripts
 7. ✅ Security với firewall và fail2ban
-8. ✅ Performance optimization
+8. ✅ Performance optimization với health checks
 
 ---
 
 ## 🛠 Commands Hữu Ích
 
-### Docker Commands
+### Docker Management
 
 ```bash
-# Xem logs realtime
-docker-compose logs -f wedding-app
-
-# Restart app
-docker-compose restart wedding-app
-
 # Update code và redeploy
 ~/update-website.sh
 
@@ -1080,6 +878,15 @@ docker-compose restart wedding-app
 
 # Check status
 ~/check-status.sh
+
+# Quick restart
+docker-compose restart wedding-app
+
+# View logs realtime
+docker-compose logs -f wedding-app
+
+# Container shell access
+docker exec -it wedding-app sh
 ```
 
 ### Nginx Commands
@@ -1115,59 +922,64 @@ sudo certbot renew --dry-run
 
 ### Docker Issues
 
-**Lỗi repository "ttps" hoặc không tìm thấy package:**
+**Container không start:**
 
 ```bash
-# Clean up lỗi repository
-sudo rm -f /etc/apt/sources.list.d/docker.list
-sudo rm -f /etc/apt/keyrings/docker.gpg
-
-# Cài lại Docker bằng script tự động
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker deploy
-rm get-docker.sh
-
-# Test Docker
-sudo systemctl start docker
-docker --version
-```
-
-**Container không start hoặc bị crash:**
-
-```bash
-# Kiểm tra logs
+# Kiểm tra Docker logs
 docker logs wedding-app
 
-# Kiểm tra resource usage
-docker stats
+# Kiểm tra container health
+docker inspect wedding-app --format='{{.State.Health.Status}}'
 
-# Kiểm tra disk space
-df -h
+# Rebuild container
+docker-compose down
+docker-compose build --no-cache
+docker-compose up -d
+```
 
+**Build failures:**
+
+```bash
 # Clean Docker system
 docker system prune -f
 docker volume prune -f
+
+# Rebuild từ đầu
+docker-compose down
+docker rmi $(docker images -q)
+docker-compose build --no-cache
 ```
 
-**Build Docker image bị lỗi:**
+**Memory/Resource issues:**
 
 ```bash
-# Build với verbose logs
-docker-compose build --no-cache --progress=plain
+# Check resource usage
+docker stats
 
-# Check Dockerfile syntax
-docker run --rm -i hadolint/hadolint < Dockerfile
+# Restart Docker daemon
+sudo systemctl restart docker
+```
 
-# Build từng stage để debug
-docker build --target=deps .
+### Application Issues
+
+**Container chạy nhưng website không load:**
+
+```bash
+# Check container logs
+docker logs wedding-app --tail=50
+
+# Check port binding
+docker port wedding-app
+
+# Test container health
+curl http://localhost:3000
 ```
 
 ### Website Issues
 
 **Nếu website không load:**
 
-1. **Check container:**
+1. **Check Docker:**
 
    ```bash
    docker ps
@@ -1198,68 +1010,26 @@ docker build --target=deps .
    sudo ufw status
    ```
 
-### SSL Issues
-
-**Nếu SSL không hoạt động:**
-
-```bash
-# Kiểm tra certificate status
-sudo certbot certificates
-
-# Test SSL handshake
-openssl s_client -connect loihangwedding.io.vn:443
-
-# Re-issue certificate
-sudo certbot delete --cert-name loihangwedding.io.vn
-sudo certbot --nginx -d loihangwedding.io.vn -d www.loihangwedding.io.vn
-```
-
-**SSL certificate expired:**
-
-```bash
-# Force renewal
-sudo certbot renew --force-renewal
-
-# Check renewal service
-sudo systemctl status snap.certbot.renew.timer
-```
-
-### Performance Issues
-
-**Website chậm:**
-
-```bash
-# Check resource usage
-htop
-docker stats
-
-# Check Nginx access logs
-sudo tail -f /var/log/nginx/access.log
-
-# Optimize Docker
-docker system df
-docker system prune
-
-# Check network latency
-ping google.com
-```
-
 ### Emergency Recovery
 
 **Nếu tất cả đều fail:**
 
 ```bash
-# Stop tất cả services
+# Stop tất cả containers
 docker-compose down
-sudo systemctl stop nginx
 
-# Restart từ đầu
-sudo systemctl start nginx
+# Clean Docker system
+docker system prune -af
+
+# Restart Docker service
+sudo systemctl restart docker
+
+# Rebuild và restart
+docker-compose build --no-cache
 docker-compose up -d
 
-# Restore from backup
+# Restore from backup nếu cần
 ~/backup-website.sh
-# (Restore từ backup gần nhất nếu có)
 ```
 
 ---
@@ -1272,5 +1042,6 @@ Sau khi deploy xong, bạn có thể:
 2. 🔄 Sử dụng `~/update-website.sh` để update code
 3. 💾 Sử dụng `~/backup-website.sh` để backup
 4. 📊 Kiểm tra logs với `docker-compose logs wedding-app`
+5. 📈 Monitor resource với `docker stats`
 
-**🎊 Chúc mừng! Website cưới của bạn đã sẵn sàng!**
+**🎊 Chúc mừng! Website cưới của bạn đã sẵn sàng với Docker!**
