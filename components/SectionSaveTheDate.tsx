@@ -38,6 +38,7 @@ const SectionSaveTheDate = () => {
                 alt="Save The Date Decoration"
                 width={360}
                 height={503}
+                priority
                 className=" w-[358px] z-8 h-[549px] object-cover mx-auto pt-10 absolute -top-[125px] left-0 -right-[2px] bottom-0 m-auto object-center"
             />
             {/* </div> */}
