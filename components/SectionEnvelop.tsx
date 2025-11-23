@@ -25,7 +25,7 @@ export const SectionEnvelop = ({ slug }: { slug: "groom" | "bridal" }) => {
       </motion.div>
       <motion.div variants={imageAnimation}>
         <Image
-          src="/images/flower_1.png"
+          src="/images/webp/flower_1.webp"
           alt="Flower decoration"
           width={100}
           height={100}
@@ -60,7 +60,7 @@ export const SectionEnvelop = ({ slug }: { slug: "groom" | "bridal" }) => {
         </span>
       </div>
       <Image
-        src="/images/flower_2.png"
+        src="/images/webp/flower_2.webp"
         alt="Flower decoration"
         width={100}
         height={100}

@@ -33,7 +33,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
 
             <motion.div variants={imageAnimation}>
                 <Image
-                    src="/images/my_lover.png"
+                    src="/images/webp/my_lover.webp"
                     alt="Wedding Quote Image"
                     width={250}
                     height={50}
@@ -52,7 +52,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
                 >
                     <motion.div variants={imageAnimation}>
                         <Image
-                            src="/images/groom.jpg"
+                            src="/images/webp/groom.webp"
                             alt="Groom Image"
                             width={168}
                             height={240}
@@ -75,7 +75,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
                 >
                     <motion.div variants={imageAnimation}>
                         <Image
-                            src="/images/bridal.jpg"
+                            src="/images/webp/bridal.webp"
                             alt="Bride Image"
                             width={168}
                             height={240}
@@ -121,7 +121,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
                 variants={imageAnimation}
             >
                 <Image
-                    src="/images/album_layout.png"
+                    src="/images/webp/album_layout.webp"
                     alt="Wedding Album Layout"
                     fill
                     className="object-cover"
@@ -132,7 +132,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
                     variants={imageAnimation}
                 >
                     <Image
-                        src="/images/picture_2.jpg"
+                        src="/images/webp/picture_2.webp"
                         alt="Wedding Picture 2"
                         className="object-cover mt-10 w-[380] h-[260px] object-[25%_25%]"
                         priority
@@ -149,7 +149,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
                     variants={imageAnimation}
                 >
                     <Image
-                        src="/images/picture_6.jpg"
+                        src="/images/webp/picture_6.webp"
                         alt="Wedding Picture 6"
                         className="object-cover mt-10 w-[380] h-[260px] object-[25%_85%]"
                         priority
@@ -166,7 +166,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
                     variants={imageAnimation}
                 >
                     <Image
-                        src="/images/picture_3.jpg"
+                        src="/images/webp/picture_3.webp"
                         alt="Wedding Picture 3"
                         className="object-cover mt-10 w-[380] h-[260px] object-[15%_0%]"
                         priority

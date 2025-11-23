@@ -62,7 +62,7 @@ const SectionRsvp = () => {
             <Heart />
             <div>
                 <Image
-                    src="/images/present.png"
+                    src="/images/webp/present.webp"
                     alt="Present gift"
                     width={100}
                     height={100}
@@ -80,7 +80,7 @@ const SectionRsvp = () => {
                     </motion.div>
                     <div className="relative w-48 h-48 mb-4">
                         <Image
-                            src="/images/qr_groom.jpg"
+                            src="/images/webp/qr_groom.webp"
                             alt="QR Code Chú rể"
                             fill
                             className="object-contain"
@@ -103,7 +103,7 @@ const SectionRsvp = () => {
                     </motion.div>
                     <div className="relative w-48 h-48 mb-4">
                         <Image
-                            src="/images/qr_bridal.jpg"
+                            src="/images/webp/qr_bridal.webp"
                             alt="QR Code Cô dâu"
                             fill
                             className="object-contain"
@@ -198,8 +198,8 @@ const SectionRsvp = () => {
                     </form>
                 </div>
             </div>
-            <Image src="/images/groom_bridal.png" alt="RSVP Image" width={150} height={350} className="py-10" />
-            <Image src="/images/thank_you.png" alt="RSVP Image" width={200} height={350} className="pb-10" />
+            <Image src="/images/webp/groom_bridal.webp" alt="RSVP Image" width={150} height={350} className="py-10" />
+            <Image src="/images/webp/thank_you.webp" alt="RSVP Image" width={200} height={350} className="pb-10" />
             <div className="bg-black py-2 px-3 text-white flex justify-between w-full font-mallong">
                 <span>Created with ♥ by Evanloi</span>
                 <span>|</span>

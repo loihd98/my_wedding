@@ -16,7 +16,7 @@ Open: `components/SectionEnvelop.tsx`
 
 ### 2️⃣ Add Your Couple Photo
 
-- File location: `/public/images/invitation_card.png`
+- File location: `/public/images/invitation_card.webp`
 - Recommended size: 800x600px (4:3 ratio)
 - Format: PNG or JPG
 - Max file size: 500KB
@@ -40,7 +40,7 @@ groomName: "Loi";
 brideName: "Hang";
 weddingDate: "15.06.2026";
 invitationText: "Chúng tôi trân trọng kính mời bạn đến dự lễ cưới của chúng tôi";
-heroImage: "/images/invitation_card.png";
+heroImage: "/images/invitation_card.webp";
 soundEffect: "/audio/open-card.mp3";
 ```
 

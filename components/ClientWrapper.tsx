@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { preventHashReload } from "@/lib/preventHashReload";
 // import { initSmoothScroll } from "@/lib/animations"; // Disabled to prevent reload
 
 interface ClientWrapperProps {
@@ -10,7 +11,7 @@ interface ClientWrapperProps {
 // Detect in-app browsers that might cause issues
 const detectInAppBrowser = () => {
   if (typeof window === 'undefined') return false;
-  
+
   const userAgent = navigator.userAgent.toLowerCase();
   return (
     userAgent.includes('facebook') ||
@@ -27,10 +28,13 @@ const detectInAppBrowser = () => {
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
   const [isInAppBrowser, setIsInAppBrowser] = useState(false);
-  
+
   useEffect(() => {
     setIsInAppBrowser(detectInAppBrowser());
     console.log('Browser type:', isInAppBrowser ? 'In-app browser' : 'Regular browser');
+    
+    // Initialize hash reload prevention immediately
+    preventHashReload();
   }, []);
 
   // Disable all scroll effects to prevent reload issues

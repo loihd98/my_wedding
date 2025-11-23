@@ -129,11 +129,11 @@ Place your images in `/public/images/`:
 ```
 public/
   images/
-    hero-bg.jpg          # Hero background (1920x1080 recommended)
-    og-image.jpg         # Social media preview (1200x630)
+    hero-bg.webp          # Hero background (1920x1080 recommended)
+    og-image.webp         # Social media preview (1200x630)
     gallery/
-      1.jpg              # Gallery photos
-      2.jpg
+      1.webp              # Gallery photos
+      2.webp
       ...
 ```
 
@@ -142,7 +142,7 @@ Update `/components/Gallery.tsx`:
 ```typescript
 const photos: Photo[] = [
   {
-    src: "/images/gallery/1.jpg",
+    src: "/images/gallery/1.webp",
     width: 4,
     height: 3,
     alt: "Your photo description",

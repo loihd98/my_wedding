@@ -63,9 +63,9 @@ export async function appendToSheet(
     const timestamp = new Date().toLocaleString("vi-VN", {
       timeZone: "Asia/Ho_Chi_Minh",
     });
-    
+
     // Ensure URL is always present
-    const currentUrl = url && url !== 'Unknown' ? url : 'N/A';
+    const currentUrl = url && url !== "Unknown" ? url : "N/A";
 
     const values = [
       [name, attendanceText, timestamp, currentUrl], // Name, Attendance, Timestamp, URL

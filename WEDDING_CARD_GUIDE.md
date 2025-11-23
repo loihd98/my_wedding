@@ -28,7 +28,7 @@ The component is already integrated into `SectionEnvelop.tsx`. You can customize
   brideName="Hang"
   weddingDate="15.06.2026"
   invitationText="Chúng tôi trân trọng kính mời bạn đến dự lễ cưới của chúng tôi"
-  heroImage="/images/invitation_card.png"
+  heroImage="/images/invitation_card.webp"
   soundEffect="/audio/open-card.mp3"
 />
 ```
@@ -59,7 +59,7 @@ invitationText = "Your custom invitation message here";
 Place your couple photo at:
 
 ```
-/public/images/invitation_card.png
+/public/images/invitation_card.webp
 ```
 
 **Recommended specs:**
@@ -202,7 +202,7 @@ transform-style: preserve-3d
 
 ### Images Not Loading
 
-- Verify image path: `/public/images/invitation_card.png`
+- Verify image path: `/public/images/invitation_card.webp`
 - Check file permissions
 - Ensure Next.js Image Optimization is working
 
@@ -221,7 +221,7 @@ components/
 
 public/
   ├── images/
-  │   └── invitation_card.png   # Hero image
+  │   └── invitation_card.webp   # Hero image
   ├── audio/
   │   ├── open-card.mp3         # Sound effect
   │   └── AUDIO_INSTRUCTIONS.md # Audio setup guide
@@ -238,7 +238,7 @@ public/
   brideName="Jane"
   weddingDate="01.01.2027"
   invitationText="Join us for our special day"
-  heroImage="/images/couple.png"
+  heroImage="/images/couple.webp"
 />
 ```
 
@@ -250,7 +250,7 @@ public/
   brideName="Victoria"
   weddingDate="15.08.2026"
   invitationText="We would be honored by your presence at our wedding celebration"
-  heroImage="/images/engagement-photo.png"
+  heroImage="/images/engagement-photo.webp"
   soundEffect="/audio/elegant-chime.mp3"
 />
 ```
@@ -258,7 +258,7 @@ public/
 ## 🚀 Next Steps
 
 1. ✅ Component is installed and ready
-2. 📸 Add your couple photo to `/public/images/invitation_card.png`
+2. 📸 Add your couple photo to `/public/images/invitation_card.webp`
 3. 🎵 (Optional) Add sound effect to `/public/audio/open-card.mp3`
 4. ✏️ Update names and dates in `SectionEnvelop.tsx`
 5. 🎨 Customize colors/fonts if desired

@@ -2,7 +2,19 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, hash } = request.nextUrl;
+  const userAgent = request.headers.get('user-agent') || '';
+  
+  // Detect in-app browsers that have reload issues with hash URLs
+  const isInAppBrowser = /Instagram|FBAN|FBAV|Twitter|Line|Snapchat|LinkedIn|WeChat|QQ|MicroMessenger|WhatsApp|Telegram|TikTok|ByteDance|Musical\.ly/i.test(userAgent) ||
+    /Mobile.*Safari/i.test(userAgent) && !/Version.*Safari/i.test(userAgent);
+  
+  // If in-app browser and URL contains hash, strip hash to prevent reload
+  if (isInAppBrowser && hash) {
+    const url = request.nextUrl.clone();
+    url.hash = '';
+    return NextResponse.redirect(url);
+  }
 
   // Allow only /groom and /bridal paths (and internal Next.js paths)
   const allowedPaths = ["/groom", "/bridal"];
@@ -10,7 +22,7 @@ export function middleware(request: NextRequest) {
   const isNextInternalPath =
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
-    pathname === "/favicon_wedding.png" ||
+    pathname === "/webp/favicon_wedding.webp" ||
     pathname.includes(".") ||
     pathname.startsWith("/images") ||
     pathname.startsWith("/audio") ||
@@ -70,8 +82,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - Static assets (.svg, .png, .jpg, etc.)
+     * - Static assets (.svg, .webp, .webp, etc.)
      */
-    "/((?!_next/static|_next/image|favicon_wedding.png|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|woff|woff2|ttf|eot)$).*)",
+    "/((?!_next/static|_next/image|favicon_wedding.webp|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|css|js|woff|woff2|ttf|eot)$).*)",
   ],
 };

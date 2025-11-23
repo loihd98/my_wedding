@@ -18,7 +18,7 @@ export const SectionDate = () => {
             <Heart />
             <motion.div variants={imageAnimation}>
                 <Image
-                    src="/images/save_the_date.png"
+                    src="/images/webp/save_the_date.webp"
                     alt="Save The Date Decoration"
                     width={273}
                     height={36}

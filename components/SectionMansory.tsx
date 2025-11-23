@@ -45,17 +45,17 @@ const SectionMansory = () => {
 
     // Mock data for wedding gallery images
     const galleryImages = [
-        { src: '/images/picture_11.jpg', alt: 'Wedding Photo 1', height: 'h-[250px]' },
-        { src: '/images/picture_10.jpg', alt: 'Wedding Photo 2', height: 'h-[300px]' },
-        { src: '/images/picture_9.jpg', alt: 'Wedding Photo 3', height: 'h-[270px]' },
-        { src: '/images/picture_4.jpg', alt: 'Wedding Photo 4', height: 'h-[320px]' },
-        { src: '/images/picture_5.jpg', alt: 'Wedding Photo 5', height: 'h-[230px]' },
-        { src: '/images/picture_6.jpg', alt: 'Wedding Photo 6', height: 'h-[290px]' },
-        { src: '/images/picture_7.jpg', alt: 'Wedding Photo 7', height: 'h-[280px]' },
-        { src: '/images/picture_8.jpg', alt: 'Wedding Photo 8', height: 'h-[250px]' },
-        { src: '/images/picture_3.jpg', alt: 'Wedding Photo 9', height: 'h-[310px]' },
-        { src: '/images/picture_2.jpg', alt: 'Wedding Photo 10', height: 'h-[220px]' },
-        { src: '/images/picture_1.jpg', alt: 'Wedding Photo 11', height: 'h-[220px]' },
+        { src: '/images/webp/picture_11.webp', alt: 'Wedding Photo 1', height: 'h-[250px]' },
+        { src: '/images/webp/picture_10.webp', alt: 'Wedding Photo 2', height: 'h-[300px]' },
+        { src: '/images/webp/picture_9.webp', alt: 'Wedding Photo 3', height: 'h-[270px]' },
+        { src: '/images/webp/picture_4.webp', alt: 'Wedding Photo 4', height: 'h-[320px]' },
+        { src: '/images/webp/picture_5.webp', alt: 'Wedding Photo 5', height: 'h-[230px]' },
+        { src: '/images/webp/picture_6.webp', alt: 'Wedding Photo 6', height: 'h-[290px]' },
+        { src: '/images/webp/picture_7.webp', alt: 'Wedding Photo 7', height: 'h-[280px]' },
+        { src: '/images/webp/picture_8.webp', alt: 'Wedding Photo 8', height: 'h-[250px]' },
+        { src: '/images/webp/picture_3.webp', alt: 'Wedding Photo 9', height: 'h-[310px]' },
+        { src: '/images/webp/picture_2.webp', alt: 'Wedding Photo 10', height: 'h-[220px]' },
+        { src: '/images/webp/picture_1.webp', alt: 'Wedding Photo 11', height: 'h-[220px]' },
     ];
 
     // Split images into 3 columns for better layout

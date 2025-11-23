@@ -17,7 +17,7 @@ const SectionSaveTheDate = () => {
         >
             <motion.div variants={imageAnimation}>
                 <Image
-                    src="/images/picture_card.png"
+                    src="/images/webp/picture_card.webp"
                     alt="Save The Date Decoration"
                     width={408}
                     height={652}

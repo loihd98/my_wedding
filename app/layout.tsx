@@ -242,14 +242,70 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon_wedding.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon_wedding.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/webp/favicon_wedding.webp" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/webp/favicon_wedding.webp" />
+        <link rel="apple-touch-icon" href="/webp/apple-touch-icon.webp" />
         <meta name="theme-color" content="#e3607e" />
-        
+
         {/* Essential meta tags only */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="format-detection" content="telephone=no" />
+        
+        {/* Hash reload prevention script - must load before framework scripts */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                // Early hash reload prevention for in-app browsers
+                if (typeof window === 'undefined') return;
+                
+                var userAgent = navigator.userAgent || '';
+                var isInAppBrowser = /Instagram|FBAN|FBAV|Twitter|Line|Snapchat|LinkedIn|WeChat|QQ|MicroMessenger|WhatsApp|Telegram|TikTok|ByteDance|Musical\\.ly/i.test(userAgent) ||
+                  (/Mobile.*Safari/i.test(userAgent) && !/Version.*Safari/i.test(userAgent));
+                
+                if (!isInAppBrowser) return;
+                
+                console.log('[Early Prevention] In-app browser detected, applying immediate hash protection');
+                
+                // Clean up any hash from current URL immediately
+                if (location.hash) {
+                  var cleanUrl = location.href.split('#')[0];
+                  history.replaceState(null, '', cleanUrl);
+                  console.log('[Early Prevention] Cleaned initial hash');
+                }
+                
+                // Override reload function immediately to prevent framework-triggered reloads
+                var originalReload = location.reload.bind(location);
+                location.reload = function() {
+                  var stack = new Error().stack || '';
+                  var isHashRelated = stack.includes('includes("#")') || location.hash;
+                  
+                  if (isHashRelated) {
+                    console.warn('[Early Prevention] Blocked framework hash reload');
+                    if (location.hash) {
+                      var urlWithoutHash = location.href.split('#')[0];
+                      history.replaceState(null, '', urlWithoutHash);
+                    }
+                    return;
+                  }
+                  
+                  originalReload();
+                };
+                
+                // Prevent hashchange events
+                window.addEventListener('hashchange', function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  var urlWithoutHash = location.href.split('#')[0];
+                  history.replaceState(null, '', urlWithoutHash);
+                  console.warn('[Early Prevention] Hash change blocked');
+                }, true);
+                
+                console.log('[Early Prevention] Hash protection active');
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="antialiased">
         {children}

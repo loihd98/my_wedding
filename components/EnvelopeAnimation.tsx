@@ -16,7 +16,7 @@ export const EnvelopeAnimation: React.FC<EnvelopeAnimationProps> = ({
   brideName = "Hang",
   weddingDate = "15.06.2026",
   invitationText = "Chúng tôi trân trọng kính mời bạn đến dự lễ cưới của chúng tôi",
-  heroImage = "/images/picture_1.jpg",
+  heroImage = "/images/webp/picture_1.webp",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -67,7 +67,7 @@ export const EnvelopeAnimation: React.FC<EnvelopeAnimationProps> = ({
         {/* Wax Seal */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-[30px] h-[30px]">
           <Image
-            src="/images/wax-seal.webp"
+            src="/images/webp/wax-seal.webp"
             alt="Wax seal"
             width={30}
             height={30}

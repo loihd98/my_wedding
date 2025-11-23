@@ -148,7 +148,8 @@ html {
 }
 
 /* Simple in-app browser fixes */
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
 
@@ -158,7 +159,15 @@ body {
 }
 
 /* Allow text selection for essential elements */
-input, textarea, p, h1, h2, h3, h4, h5, h6 {
+input,
+textarea,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   -webkit-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
@@ -227,11 +236,11 @@ img {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   .animate-masonry {
     animation: none !important;
   }
-  
+
   [data-framer-name] {
     will-change: auto !important;
   }

@@ -64,7 +64,7 @@ export default function Audio() {
       >
         <div className="relative w-full h-full rounded-full overflow-hidden">
           <Image
-            src="/images/audio.png"
+            src="/images/webp/audio.png"
             alt="Audio control"
             width={30}
             height={30}

@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       fullName,
       attendance,
       timestamp,
-      url: url || 'No URL provided',
+      url: url || "No URL provided",
       ip: request.ip || request.headers.get("x-forwarded-for"),
       userAgent: request.headers.get("user-agent"),
     });
