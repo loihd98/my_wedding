@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import { useImageCache } from '@/lib/imageCache';
 
@@ -11,7 +11,11 @@ const SectionMansory = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const { preloadImages } = useImageCache();
 
-    // Gallery images with optimized loading strategy
+    // ✅ FIX 1: Prevent re-initialization với useRef
+    const hasLoadedRef = useRef(false);
+    const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+
+    // Gallery images - đã có useMemo là tốt
     const galleryImages = useMemo(() => [
         { src: '/images/webp/picture_11.webp', alt: 'Wedding Photo 1', height: 'h-[250px]', priority: true },
         { src: '/images/webp/picture_10.webp', alt: 'Wedding Photo 2', height: 'h-[300px]', priority: true },
@@ -26,60 +30,67 @@ const SectionMansory = () => {
         { src: '/images/webp/picture_1.webp', alt: 'Wedding Photo 11', height: 'h-[220px]' },
     ], []);
 
-    // Intersection Observer for lazy loading
+    // ✅ FIX 2: Intersection Observer - chỉ chạy 1 lần
     useEffect(() => {
+        if (hasLoadedRef.current) return; // Prevent duplicate execution
+
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
+                    if (entry.isIntersecting && !hasLoadedRef.current) {
+                        hasLoadedRef.current = true;
                         setIsIntersecting(true);
+
+                        // Preload first 3 images
                         preloadImages(galleryImages.slice(0, 3).map(img => img.src))
                             .catch(console.error);
 
-                        // **Disconnect ngay khi trigger lần đầu**
-                        if (sectionRef.current) observer.unobserve(sectionRef.current);
+                        // Disconnect immediately
+                        observer.disconnect();
                     }
                 });
             },
             { rootMargin: '50px' }
         );
 
-        if (sectionRef.current) observer.observe(sectionRef.current);
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
 
         return () => observer.disconnect();
-    }, [galleryImages, preloadImages]);
+    }, []); // ✅ Empty deps - chỉ chạy khi mount
 
-    // Progressive image loading
+    // ✅ FIX 3: Progressive loading - chỉ chạy 1 lần khi isIntersecting = true
     useEffect(() => {
-        if (!isIntersecting) return;
+        if (!isIntersecting || hasLoadedRef.current === false) return;
 
-        const loadImagesProgressively = () => {
-            // Load first 3 images immediately
-            setVisibleImages(new Set([0, 1, 2]));
+        // Clear any existing timeouts
+        timeoutsRef.current.forEach(clearTimeout);
+        timeoutsRef.current = [];
 
-            // Load remaining images with delay
-            const intervals: NodeJS.Timeout[] = [];
+        // Load first 3 images immediately
+        setVisibleImages(new Set([0, 1, 2]));
 
-            galleryImages.slice(3).forEach((_, index) => {
-                const timeout = setTimeout(() => {
-                    const newIndex = index + 3;
-                    setVisibleImages(prev => {
-                        const newSet = new Set(prev);
-                        newSet.add(newIndex);
-                        console.log(`Loading image ${newIndex}: ${galleryImages[newIndex]?.src}`);
-                        return newSet;
-                    });
-                }, (index + 1) * 300); // 300ms delay between each image
+        // Load remaining images progressively
+        galleryImages.slice(3).forEach((_, index) => {
+            const timeout = setTimeout(() => {
+                const newIndex = index + 3;
+                setVisibleImages(prev => {
+                    const newSet = new Set(prev);
+                    newSet.add(newIndex);
+                    return newSet;
+                });
+            }, (index + 1) * 300);
 
-                intervals.push(timeout);
-            });
+            timeoutsRef.current.push(timeout);
+        });
 
-            return () => intervals.forEach(clearTimeout);
+        // Cleanup function
+        return () => {
+            timeoutsRef.current.forEach(clearTimeout);
+            timeoutsRef.current = [];
         };
-
-        const cleanup = loadImagesProgressively();
-        return cleanup;
-    }, [isIntersecting, galleryImages]);
+    }, [isIntersecting]); // ✅ Chỉ phụ thuộc vào isIntersecting, không có galleryImages
 
     const gradientBase64 =
         "data:image/svg+xml;base64," +
@@ -99,12 +110,25 @@ const SectionMansory = () => {
     const column3 = useMemo(() => galleryImages.filter((_, index) => index % 3 === 2), [galleryImages]);
     const isIapBrowser = typeof window !== 'undefined' && /zalo|fbav|line/i.test(navigator.userAgent);
 
+    // ✅ FIX 4: Memoize error handlers
+    const handleImageError = useCallback((originalIndex: number, src: string) => {
+        console.error(`Failed to load image ${originalIndex}: ${src}`);
+        setFailedImages(prev => {
+            const newSet = new Set(prev);
+            newSet.add(originalIndex);
+            return newSet;
+        });
+    }, []);
+
+    const handleImageLoad = useCallback((originalIndex: number, src: string) => {
+        console.log(`Successfully loaded image ${originalIndex}: ${src}`);
+    }, []);
 
     // Image component with lazy loading and placeholder
-    const ImageWithPlaceholder = ({
+    const ImageWithPlaceholder = useCallback(({
         image,
-        originalIndex,  // Index trong galleryImages gốc
-        displayIndex,   // Index trong column hiện tại
+        originalIndex,
+        displayIndex,
         columnIndex
     }: {
         image: typeof galleryImages[0],
@@ -114,19 +138,6 @@ const SectionMansory = () => {
     }) => {
         const shouldLoad = visibleImages.has(originalIndex);
         const hasFailed = failedImages.has(originalIndex);
-
-        const handleImageError = () => {
-            console.error(`Failed to load image ${originalIndex}: ${image.src}`);
-            setFailedImages(prev => {
-                const newSet = new Set(prev);
-                newSet.add(originalIndex);
-                return newSet;
-            });
-        };
-
-        const handleImageLoad = () => {
-            console.log(`Successfully loaded image ${originalIndex}: ${image.src}`);
-        };
 
         return (
             <div
@@ -167,14 +178,14 @@ const SectionMansory = () => {
                         blurDataURL={gradientBase64}
                         loading={image.priority ? "eager" : "lazy"}
                         priority={image.priority}
-                        onLoad={handleImageLoad}
-                        onError={handleImageError}
-                        unoptimized={false} // Enable Next.js optimization
+                        onLoad={() => handleImageLoad(originalIndex, image.src)}
+                        onError={() => handleImageError(originalIndex, image.src)}
+                        unoptimized={false}
                     />
                 )}
             </div>
         );
-    };
+    }, [visibleImages, failedImages, isIapBrowser, handleImageError, handleImageLoad, gradientBase64]);
 
     return (
         <div
@@ -190,17 +201,6 @@ const SectionMansory = () => {
                     Những khoảnh khắc đáng nhớ của chúng tôi
                 </p>
             </div>
-
-            {/* Debug info - chỉ hiển thị trong development */}
-            {/* {process.env.NODE_ENV === 'development' && (
-                <div className="max-w-7xl mx-auto px-4 mb-4">
-                    <div className="text-sm text-gray-500 bg-gray-100 p-2 rounded">
-                        <strong>Debug:</strong> Visible: {Array.from(visibleImages).join(', ')} | 
-                        Failed: {Array.from(failedImages).join(', ')} |
-                        Intersecting: {isIntersecting ? 'Yes' : 'No'}
-                    </div>
-                </div>
-            )} */}
 
             {/* Optimized Masonry Grid */}
             <div className="max-w-7xl mx-auto px-4">
