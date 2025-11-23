@@ -3,16 +3,19 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname, hash } = request.nextUrl;
-  const userAgent = request.headers.get('user-agent') || '';
-  
+  const userAgent = request.headers.get("user-agent") || "";
+
   // Detect in-app browsers that have reload issues with hash URLs
-  const isInAppBrowser = /Instagram|FBAN|FBAV|Twitter|Line|Snapchat|LinkedIn|WeChat|QQ|MicroMessenger|WhatsApp|Telegram|TikTok|ByteDance|Musical\.ly/i.test(userAgent) ||
-    /Mobile.*Safari/i.test(userAgent) && !/Version.*Safari/i.test(userAgent);
-  
+  const isInAppBrowser =
+    /Instagram|FBAN|FBAV|Twitter|Line|Snapchat|LinkedIn|WeChat|QQ|MicroMessenger|WhatsApp|Telegram|TikTok|ByteDance|Musical\.ly/i.test(
+      userAgent
+    ) ||
+    (/Mobile.*Safari/i.test(userAgent) && !/Version.*Safari/i.test(userAgent));
+
   // If in-app browser and URL contains hash, strip hash to prevent reload
   if (isInAppBrowser && hash) {
     const url = request.nextUrl.clone();
-    url.hash = '';
+    url.hash = "";
     return NextResponse.redirect(url);
   }
 

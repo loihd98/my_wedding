@@ -18,11 +18,11 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-10%" }}
-            variants={containerAnimation}
+            // variants={containerAnimation}
         >
             <motion.div
                 className="flex py-10 flex-col h-auto w-full min-w-[20px] text-black text-[16.848px] font-medium text-center leading-[1.45] tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-quicksand [text-shadow:0_0_2px_rgba(0,0,0,0)]"
-                variants={fadeInLeft}
+                // variants={fadeInLeft}
             >
                 <span>To Our Family And Friends,</span>
                 <span>Thank You For Celebrating Our Special Day,</span>
@@ -31,7 +31,9 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
 
             <Heart />
 
-            <motion.div variants={imageAnimation}>
+            <motion.div 
+            // variants={imageAnimation}
+            >
                 <Image
                     src="/images/webp/my_lover.webp"
                     alt="Wedding Quote Image"
@@ -44,13 +46,15 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
 
             <motion.div
                 className="flex justify-around w-full h-auto min-w-[20px] text-black text-[24.336px] font-medium text-center leading-normal tracking-[0px] normal-case no-underline not-italic pointer-events-none overflow-hidden break-words font-mallong [text-shadow:0_0_2px_rgba(0,0,0,0)]"
-                variants={containerAnimation}
+                // variants={containerAnimation}
             >
                 <motion.div
                     className="flex flex-col gap-3 w-1/2 items-center"
-                    variants={fadeInLeft}
+                    // variants={fadeInLeft}
                 >
-                    <motion.div variants={imageAnimation}>
+                    <motion.div 
+                    // variants={imageAnimation}
+                    >
                         <Image
                             src="/images/webp/groom.webp"
                             alt="Groom Image"
@@ -71,9 +75,11 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
 
                 <motion.div
                     className="flex flex-col gap-3 w-1/2 items-center"
-                    variants={fadeInRight}
+                    // variants={fadeInRight}
                 >
-                    <motion.div variants={imageAnimation}>
+                    <motion.div 
+                    // variants={imageAnimation}
+                    >
                         <Image
                             src="/images/webp/bridal.webp"
                             alt="Bride Image"
@@ -118,7 +124,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
 
             <motion.div
                 className="h-[843px] max-w-[468px] relative w-full"
-                variants={imageAnimation}
+                // variants={imageAnimation}
             >
                 <Image
                     src="/images/webp/album_layout.webp"
@@ -129,7 +135,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
                 />
                 <motion.div
                     className="absolute -top-4 md:left-[45px] left-[26px]"
-                    variants={imageAnimation}
+                    // variants={imageAnimation}
                 >
                     <Image
                         src="/images/webp/picture_2.webp"
@@ -146,7 +152,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
 
                 <motion.div
                     className="absolute top-[250px] md:left-[45px] left-[26px]"
-                    variants={imageAnimation}
+                    // variants={imageAnimation}
                 >
                     <Image
                         src="/images/webp/picture_6.webp"
@@ -163,7 +169,7 @@ const SectionActor = ({ currentSlug }: SectionActorProps) => {
 
                 <motion.div
                     className="absolute top-[518px] md:left-[45px] left-[26px]"
-                    variants={imageAnimation}
+                    // variants={imageAnimation}
                 >
                     <Image
                         src="/images/webp/picture_3.webp"
