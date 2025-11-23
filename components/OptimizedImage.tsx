@@ -58,16 +58,15 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           height={height}
           fill={fill}
           sizes={sizes}
-          className={`transition-opacity duration-300 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
           onLoad={() => setIsLoaded(true)}
           loading={priority ? 'eager' : 'lazy'}
           priority={priority}
         />
       )}
       {!isInView && !priority && (
-        <div 
+        <div
           className={`bg-gray-200 animate-pulse ${fill ? 'w-full h-full' : ''}`}
           style={width && height ? { width, height } : undefined}
         />
