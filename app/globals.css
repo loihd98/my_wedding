@@ -124,18 +124,22 @@ html {
   -webkit-transform: translateZ(0);
 }
 
-/* Audio button forced positioning */
+/* Audio button forced positioning - highest priority */
 .audio-button {
   position: fixed !important;
   top: 30px !important;
   right: 16px !important;
-  z-index: 99999 !important;
+  z-index: 2147483647 !important; /* Maximum z-index value */
   transform: none !important;
   margin: 0 !important;
   width: 30px !important;
   height: 30px !important;
   display: block !important;
   pointer-events: auto !important;
+  isolation: isolate !important; /* Create new stacking context */
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
 }
 
 /* Performance optimizations */

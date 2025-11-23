@@ -63,15 +63,19 @@ export async function appendToSheet(
     const timestamp = new Date().toLocaleString("vi-VN", {
       timeZone: "Asia/Ho_Chi_Minh",
     });
+    
+    // Ensure URL is always present
+    const currentUrl = url && url !== 'Unknown' ? url : 'N/A';
 
     const values = [
-      [name, attendanceText, timestamp, url || ""], // Name, Attendance, Timestamp, URL
+      [name, attendanceText, timestamp, currentUrl], // Name, Attendance, Timestamp, URL
     ];
 
     console.log("Attempting to append to Google Sheets:", {
       name,
       attendanceText,
       timestamp,
+      url: currentUrl,
     });
 
     // Check if sheet has headers - if not, add them
