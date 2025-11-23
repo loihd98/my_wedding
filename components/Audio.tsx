@@ -12,24 +12,43 @@ export default function Audio() {
   useEffect(() => {
     setIsMounted(true);
     
+    // Detect in-app browser
+    const isInAppBrowser = typeof window !== 'undefined' && (
+      navigator.userAgent.toLowerCase().includes('facebook') ||
+      navigator.userAgent.toLowerCase().includes('instagram') ||
+      navigator.userAgent.toLowerCase().includes('line') ||
+      navigator.userAgent.toLowerCase().includes('messenger') ||
+      navigator.userAgent.toLowerCase().includes('zalo')
+    );
+    
     const audio = audioRef.current;
     if (!audio) return;
 
     const handleEnded = () => setIsPlaying(false);
     audio.addEventListener("ended", handleEnded);
 
-    // Auto-play audio when component mounts
-    const playAudio = async () => {
-      try {
-        await audio.play();
-        setIsPlaying(true);
-      } catch (error) {
-        // Auto-play might be blocked by browser policy
-        console.log("Auto-play was prevented by browser policy");
-      }
-    };
+    // Auto-play audio when component mounts (skip for in-app browsers)
+    if (!isInAppBrowser) {
+      const playAudio = async () => {
+        try {
+          await audio.play();
+          setIsPlaying(true);
+        } catch (error) {
+          // Auto-play might be blocked by browser policy
+          console.log("Auto-play was prevented by browser policy");
+        }
+      };
 
-    playAudio();
+      // Add delay for in-app browsers
+      const timer = setTimeout(playAudio, 1000);
+      
+      return () => {
+        clearTimeout(timer);
+        audio.removeEventListener("ended", handleEnded);
+      };
+    } else {
+      console.log('In-app browser detected, skipping auto-play');
+    }
 
     return () => {
       audio.removeEventListener("ended", handleEnded);

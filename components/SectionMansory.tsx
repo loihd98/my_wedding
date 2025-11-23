@@ -6,6 +6,21 @@ import Image from 'next/image';
 const SectionMansory = () => {
     // Setup passive event listeners for better scroll performance
     useEffect(() => {
+        // Detect in-app browser
+        const isInAppBrowser = typeof window !== 'undefined' && (
+            navigator.userAgent.toLowerCase().includes('facebook') ||
+            navigator.userAgent.toLowerCase().includes('instagram') ||
+            navigator.userAgent.toLowerCase().includes('line') ||
+            navigator.userAgent.toLowerCase().includes('messenger') ||
+            navigator.userAgent.toLowerCase().includes('zalo')
+        );
+
+        // Skip passive listeners for in-app browsers to prevent issues
+        if (isInAppBrowser) {
+            console.log('In-app browser detected, skipping passive listeners');
+            return;
+        }
+
         const handleWheel = (e: WheelEvent) => {
             // Passive wheel event handler - no preventDefault needed
         };
@@ -14,7 +29,7 @@ const SectionMansory = () => {
             // Passive touch event handler
         };
 
-        // Add passive event listeners
+        // Add passive event listeners only for regular browsers
         const addPassiveListeners = () => {
             document.addEventListener('wheel', handleWheel, { passive: true });
             document.addEventListener('touchmove', handleTouchMove, { passive: true });
