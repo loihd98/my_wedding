@@ -8,46 +8,34 @@ export default function Audio() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAudioSupported, setIsAudioSupported] = useState(true);
   const [userInteracted, setUserInteracted] = useState(false);
-
-  // ✅ FIX 1: useRef thay vì useState để tránh re-render
   const isInAppBrowserRef = useRef(false);
-  const [showIABWarning, setShowIABWarning] = useState(false);
   const detectionDoneRef = useRef(false);
 
-  // ✅ FIX 2: Detection chỉ chạy 1 lần duy nhất
+  // Detect IAB
   useEffect(() => {
     if (typeof window === 'undefined' || detectionDoneRef.current) return;
-
     detectionDoneRef.current = true;
 
     const userAgent = navigator.userAgent.toLowerCase();
-
-    // Simple check: if contains any of these keywords = IAB
     const isIAB = (
-      userAgent.includes('fban') ||        // Facebook
-      userAgent.includes('fbav') ||        // Facebook
-      userAgent.includes('instagram') ||   // Instagram
-      userAgent.includes('line') ||        // LINE
-      userAgent.includes('messenger') ||   // Messenger
-      userAgent.includes('zalo') ||        // Zalo
-      userAgent.includes('tiktok') ||      // TikTok
-      userAgent.includes('micromessenger') // WeChat
+      userAgent.includes('fban') ||
+      userAgent.includes('fbav') ||
+      userAgent.includes('instagram') ||
+      userAgent.includes('line') ||
+      userAgent.includes('messenger') ||
+      userAgent.includes('zalo') ||
+      userAgent.includes('tiktok') ||
+      userAgent.includes('micromessenger')
     );
 
     isInAppBrowserRef.current = isIAB;
+    console.log(isIAB ? '🚨 IAB detected' : '✅ Regular browser');
+  }, []);
 
-    // Debug log
-    if (isIAB) {
-      console.log('🚨 In-App Browser detected:', userAgent);
-    } else {
-      console.log('✅ Regular Browser');
-    }
-  }, []); // Chỉ chạy 1 lần
-
-  // ✅ FIX 3: Safe audio setup với proper cleanup
+  // Audio setup
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || isInAppBrowserRef.current) return;
+    if (!audio) return;
 
     const handlePlay = () => setIsPlaying(true);
     const handlePause = () => setIsPlaying(false);
@@ -55,38 +43,29 @@ export default function Audio() {
     const handleError = (e: Event) => {
       console.error('Audio error:', e);
       setIsPlaying(false);
-      setIsAudioSupported(false);
+      // Don't set unsupported immediately in IAB
+      if (!isInAppBrowserRef.current) {
+        setIsAudioSupported(false);
+      }
     };
 
-    // Passive listeners for better performance
     audio.addEventListener("play", handlePlay, { passive: true });
     audio.addEventListener("pause", handlePause, { passive: true });
     audio.addEventListener("ended", handleEnded, { passive: true });
     audio.addEventListener("error", handleError, { passive: true });
 
     return () => {
-      // Safe cleanup
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("error", handleError);
     };
-  }, []); // ✅ Empty deps - chỉ setup 1 lần
+  }, []);
 
-  // ✅ FIX 4: Optimized toggle với debounce
+  // Toggle play with IAB support
   const togglePlay = useCallback(async () => {
-    // IAB = không phát nhạc
-    if (isInAppBrowserRef.current) {
-      setShowIABWarning(true);
-      setTimeout(() => setShowIABWarning(false), 3000);
-      return;
-    }
-
     const audio = audioRef.current;
     if (!audio || !isAudioSupported) return;
-
-    // Prevent rapid clicks
-    if (audio.paused === isPlaying) return;
 
     try {
       if (isPlaying) {
@@ -99,45 +78,78 @@ export default function Audio() {
           setUserInteracted(true);
         }
 
+        // ✅ IAB workaround: load audio first
+        if (isInAppBrowserRef.current) {
+          audio.load(); // Force reload in IAB
+
+          // Wait a bit for IAB to prepare
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
         audio.currentTime = 0;
+
+        // Try to play
         const playPromise = audio.play();
 
         if (playPromise !== undefined) {
           await playPromise;
           setIsPlaying(true);
+        } else {
+          // Fallback for old browsers
+          setIsPlaying(true);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Play error:', error);
-      setIsPlaying(false);
-      setIsAudioSupported(false);
+
+      // ✅ IAB retry strategy
+      if (isInAppBrowserRef.current && error.name === 'NotAllowedError') {
+        console.log('IAB autoplay blocked, will play on next interaction');
+        // Don't set playing to false, let user try again
+      } else {
+        setIsPlaying(false);
+      }
     }
   }, [isPlaying, isAudioSupported, userInteracted]);
 
+  // ✅ Auto-play attempt for IAB (some IABs allow after user interaction)
+  useEffect(() => {
+    if (!userInteracted || !isInAppBrowserRef.current) return;
+
+    const audio = audioRef.current;
+    if (!audio || isPlaying) return;
+
+    // Try silent play first (some IABs allow this)
+    const attemptPlay = async () => {
+      try {
+        audio.muted = true;
+        await audio.play();
+        audio.muted = false;
+        setIsPlaying(true);
+      } catch (err) {
+        console.log('Silent play failed, user must click play button');
+      }
+    };
+
+    const timer = setTimeout(attemptPlay, 500);
+    return () => clearTimeout(timer);
+  }, [userInteracted, isPlaying]);
+
   return (
     <>
-      {/* ✅ FIX 5: Audio element render chỉ phụ thuộc vào isAudioSupported */}
+      {/* Audio element - always render */}
       {isAudioSupported && (
         <audio
           ref={audioRef}
-          preload="none"
+          preload="auto"
           playsInline
+          webkit-playsinline="true"
+          x-webkit-airplay="allow"
           style={{ display: 'none' }}
         >
           <source src="/audio/my_love.mp3" type="audio/mpeg" />
+          <source src="/audio/my_love.mp3" type="audio/mp3" />
         </audio>
-      )}
-
-      {/* ✅ FIX 6: Warning toast */}
-      {showIABWarning && (
-        <div
-          className="fixed top-20 left-1/2 -translate-x-1/2 z-[10000] bg-black/90 text-white px-4 py-2 rounded-lg text-sm animate-fade-in"
-          style={{
-            animation: 'fadeIn 0.3s ease-in-out',
-          }}
-        >
-          🎵 Vui lòng mở trong Safari/Chrome để nghe nhạc
-        </div>
       )}
 
       {/* Audio button */}
@@ -181,20 +193,6 @@ export default function Audio() {
           )}
         </div>
       </button>
-
-      {/* Add fadeIn animation */}
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translate(-50%, -10px);
-          }
-          to {
-            opacity: 1;
-            transform: translate(-50%, 0);
-          }
-        }
-      `}</style>
     </>
   );
 }

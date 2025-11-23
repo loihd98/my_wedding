@@ -12,6 +12,8 @@ import { SectionBottom } from "@/components/SectionBottom";
 import SectionQuoteSweet from "@/components/SectionQuoteSweet";
 import SectionRsvp from "@/components/SectionRsvp";
 import ClientWrapper from '@/components/ClientWrapper'
+import SectionQuoteSweet1 from '@/components/SectionQuoteSweet1';
+import { SectionBottom1 } from '@/components/SectionBottom1';
 
 // Valid slugs
 const validSlugs = ['groom', 'bridal'] as const
@@ -149,6 +151,8 @@ export default function SlugPage({ params }: PageProps) {
         <SectionSaveTheDate />
         <SectionBottom />
         <SectionQuoteSweet />
+        <SectionBottom1 />
+        <SectionQuoteSweet1 />
         <SectionRsvp />
       </ClientWrapper>
     </main>
