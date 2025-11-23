@@ -340,17 +340,22 @@ nano Dockerfile
 **Nội dung Dockerfile (production-ready với standalone output):**
 
 ```dockerfile
-FROM node:20-bookworm-slim
+FROM node:20-bookworm-slim AS base
 
+# Install dependencies only when needed
+FROM base AS deps
 WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm ci --only=production --omit=dev
+# Install all dependencies including devDependencies for build
+RUN npm ci
 
-# Copy source code
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build the application với standalone output
@@ -358,14 +363,30 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 RUN npm run build
 
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
 # Create user for security
-RUN groupadd -g 1001 appgroup && \
-    useradd -r -u 1001 -g appgroup appuser
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 nextjs
 
-# Set up permissions
-RUN chown -R appuser:appgroup /app
+# Copy the public folder
+COPY --from=builder /app/public ./public
 
-USER appuser
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Copy the standalone output
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
 
@@ -947,6 +968,21 @@ docker volume prune -f
 # Rebuild từ đầu
 docker-compose down
 docker rmi $(docker images -q)
+docker-compose build --no-cache
+```
+
+**Lỗi "Cannot find module 'tailwindcss'" trong build:**
+
+Nguyên nhân: Dockerfile đang sử dụng `--only=production` khiến devDependencies không được cài đặt.
+
+Giải pháp:
+
+```bash
+# Tạo lại Dockerfile với multi-stage build
+nano Dockerfile
+
+# Copy nội dung Dockerfile mới từ guide này (đã được fix)
+# Sau đó rebuild
 docker-compose build --no-cache
 ```
 

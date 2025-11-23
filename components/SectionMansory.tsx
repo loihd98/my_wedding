@@ -62,20 +62,21 @@ const SectionMansory = () => {
                 <div className="absolute inset-0 flex gap-4 px-4 max-w-7xl mx-auto">
 
                     {/* Left Column - Scrolling Down */}
-                    <div className="flex-1 flex flex-col gap-4 animate-[masonryScrollDown_40s_linear_infinite] will-change-transform">
+                    <div className="flex-1 flex flex-col gap-4 animate-[masonryScrollDown_60s_linear_infinite] animate-masonry">
                         {[...leftColumn, ...leftColumn, ...leftColumn, ...leftColumn].map((image, index) => (
                             <div
                                 key={`left-${index}`}
-                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group bg-gray-100 flex-shrink-0`}
+                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group bg-gray-100 flex-shrink-0`}
                                 style={{ minHeight: image.height.replace('h-[', '').replace(']', '') }}
                             >
                                 <Image
                                     src={image.src}
                                     alt={image.alt}
                                     fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                    loading="lazy"
+                                    // loading="lazy"
+                                    priority={index < 4}
                                 />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                             </div>
@@ -83,20 +84,21 @@ const SectionMansory = () => {
                     </div>
 
                     {/* Right Column - Scrolling Up (Reverse) */}
-                    <div className="flex-1 flex flex-col gap-4 animate-[masonryScrollUp_40s_linear_infinite] will-change-transform">
+                    <div className="flex-1 flex flex-col gap-4 animate-[masonryScrollUp_60s_linear_infinite] animate-masonry">
                         {[...rightColumn, ...rightColumn, ...rightColumn, ...rightColumn].map((image, index) => (
                             <div
                                 key={`right-${index}`}
-                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group bg-gray-100 flex-shrink-0`}
+                                className={`relative ${image.height} w-full rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group bg-gray-100 flex-shrink-0`}
                                 style={{ minHeight: image.height.replace('h-[', '').replace(']', '') }}
                             >
                                 <Image
                                     src={image.src}
                                     alt={image.alt}
                                     fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                    loading="lazy"
+                                    // loading="lazy"
+                                    priority={index < 4}
                                 />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                             </div>
